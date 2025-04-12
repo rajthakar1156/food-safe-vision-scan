@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Search, Image, Check, AlertCircle, ShieldCheck, PieChart } from "lucide-react";
+import { Search, Image, Check, AlertCircle, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,17 +9,20 @@ import { useToast } from "@/hooks/use-toast";
 
 const PRODUCT_IMAGES = {
   "lays": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?q=80&w=1740&auto=format&fit=crop",
-  "coca-cola": "https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=1365&auto=format&fit=crop",
-  "fanta": "https://images.unsplash.com/photo-1622766815178-641bef2b4630?q=80&w=1287&auto=format&fit=crop",
-  "doritos": "https://images.unsplash.com/photo-1600952841320-db92ec4047ca?q=80&w=1287&auto=format&fit=crop",
-  "kitkat": "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?q=80&w=1274&auto=format&fit=crop",
+  "kurkure": "https://images.unsplash.com/photo-1600952841320-db92ec4047ca?q=80&w=1287&auto=format&fit=crop",
+  "thums up": "https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=1365&auto=format&fit=crop",
+  "frooti": "https://images.unsplash.com/photo-1622766815178-641bef2b4630?q=80&w=1287&auto=format&fit=crop",
+  "haldiram": "https://images.unsplash.com/photo-1612196808214-3d7f8d3f3e80?q=80&w=1287&auto=format&fit=crop",
+  "parle": "https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?q=80&w=1300&auto=format&fit=crop",
+  "maggi": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=1287&auto=format&fit=crop",
+  "amul": "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=1287&auto=format&fit=crop",
   "default": "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1305&auto=format&fit=crop"
 };
 
 const SAMPLE_PRODUCTS = {
   "lays": {
-    name: "Lay's Classic Potato Chips",
-    brand: "Lay's",
+    name: "Lay's Magic Masala",
+    brand: "Lay's India",
     safeIngredients: ["Potatoes", "Vegetable Oil", "Salt"],
     cautionIngredients: ["Natural Flavors", "Citric Acid"],
     harmfulIngredients: ["Yellow 5", "TBHQ", "Sodium Diacetate"],
@@ -31,9 +34,23 @@ const SAMPLE_PRODUCTS = {
       carbs: 15,
     }
   },
-  "coca-cola": {
-    name: "Coca-Cola Classic",
-    brand: "The Coca-Cola Company",
+  "kurkure": {
+    name: "Kurkure Masala Munch",
+    brand: "PepsiCo India",
+    safeIngredients: ["Rice Meal", "Edible Vegetable Oil", "Corn Meal"],
+    cautionIngredients: ["Spice Mix", "Salt"],
+    harmfulIngredients: ["MSG", "Acidity Regulators", "Artificial Colors"],
+    overallRisk: "high",
+    nutritionalInfo: {
+      calories: 170,
+      fat: 9,
+      sodium: 190,
+      carbs: 18,
+    }
+  },
+  "thums up": {
+    name: "Thums Up",
+    brand: "Coca-Cola India",
     safeIngredients: ["Carbonated Water", "Caffeine"],
     cautionIngredients: ["Caramel Color", "Natural Flavors"],
     harmfulIngredients: ["High Fructose Corn Syrup", "Phosphoric Acid"],
@@ -45,46 +62,74 @@ const SAMPLE_PRODUCTS = {
       carbs: 39,
     }
   },
-  "fanta": {
-    name: "Fanta Orange Soda",
-    brand: "The Coca-Cola Company",
-    safeIngredients: ["Carbonated Water", "Citric Acid"],
-    cautionIngredients: ["Natural Flavors"],
-    harmfulIngredients: ["High Fructose Corn Syrup", "Yellow 6", "Red 40"],
-    overallRisk: "high",
+  "frooti": {
+    name: "Mango Frooti",
+    brand: "Parle Agro",
+    safeIngredients: ["Water", "Mango Pulp", "Sugar"],
+    cautionIngredients: ["Acidity Regulators", "Flavor"],
+    harmfulIngredients: ["Artificial Colors", "Sodium Benzoate"],
+    overallRisk: "medium",
     nutritionalInfo: {
-      calories: 160,
+      calories: 130,
       fat: 0,
-      sodium: 45,
-      carbs: 44,
+      sodium: 30,
+      carbs: 32,
     }
   },
-  "doritos": {
-    name: "Nacho Cheese Doritos",
-    brand: "Frito-Lay",
-    safeIngredients: ["Corn", "Vegetable Oil", "Salt"],
-    cautionIngredients: ["Whey Protein", "Cheese Powder", "Tomato Powder"],
-    harmfulIngredients: ["Monosodium Glutamate", "Yellow 5", "Yellow 6", "Red 40"],
-    overallRisk: "high",
+  "haldiram": {
+    name: "Haldiram's Aloo Bhujia",
+    brand: "Haldiram's",
+    safeIngredients: ["Gram Flour", "Potato", "Vegetable Oil", "Salt"],
+    cautionIngredients: ["Spices", "Mango Powder"],
+    harmfulIngredients: ["Acidity Regulators", "Antioxidants"],
+    overallRisk: "medium",
     nutritionalInfo: {
       calories: 150,
       fat: 8,
-      sodium: 210,
-      carbs: 18,
+      sodium: 180,
+      carbs: 16,
     }
   },
-  "kitkat": {
-    name: "KitKat Chocolate Bar",
-    brand: "Nestlé",
-    safeIngredients: ["Sugar", "Cocoa Butter", "Milk", "Cocoa Mass"],
-    cautionIngredients: ["Soy Lecithin", "Natural Flavors"],
-    harmfulIngredients: ["PGPR", "Vanillin"],
+  "parle": {
+    name: "Parle-G Biscuits",
+    brand: "Parle Products",
+    safeIngredients: ["Wheat Flour", "Sugar", "Edible Vegetable Oil"],
+    cautionIngredients: ["Invert Syrup", "Leavening Agents"],
+    harmfulIngredients: ["Artificial Flavors", "Emulsifiers"],
     overallRisk: "medium",
     nutritionalInfo: {
-      calories: 210,
-      fat: 11,
-      sodium: 30,
-      carbs: 26,
+      calories: 120,
+      fat: 5,
+      sodium: 40,
+      carbs: 20,
+    }
+  },
+  "maggi": {
+    name: "Maggi 2-Minute Noodles",
+    brand: "Nestlé India",
+    safeIngredients: ["Wheat Flour", "Palm Oil", "Salt"],
+    cautionIngredients: ["Wheat Gluten", "Sugar"],
+    harmfulIngredients: ["TBHQ", "Taste Enhancers", "Hydrolyzed Proteins"],
+    overallRisk: "high",
+    nutritionalInfo: {
+      calories: 180,
+      fat: 8,
+      sodium: 340,
+      carbs: 25,
+    }
+  },
+  "amul": {
+    name: "Amul Kool Milk",
+    brand: "Gujarat Cooperative Milk Marketing Federation",
+    safeIngredients: ["Milk Solids", "Sugar", "Cocoa Solids"],
+    cautionIngredients: ["Stabilizers", "Emulsifiers"],
+    harmfulIngredients: ["Artificial Flavors"],
+    overallRisk: "low",
+    nutritionalInfo: {
+      calories: 140,
+      fat: 3,
+      sodium: 80,
+      carbs: 22,
     }
   }
 };
@@ -121,7 +166,7 @@ const ManualCheck = () => {
       } else {
         toast({
           title: "Product not found",
-          description: "Try entering a common brand like Lays, Coca-Cola, Fanta, Doritos, or KitKat",
+          description: "Try entering a common Indian brand like Lays, Kurkure, Thums Up, Frooti, Haldiram, Parle, Maggi, or Amul",
           variant: "destructive",
         });
         setResult(null);
@@ -137,7 +182,7 @@ const ManualCheck = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold">Quick Product Check</h2>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Enter a product name to check for potential harmful chemicals.
+            Enter an Indian product name to check for potential harmful chemicals.
           </p>
         </div>
 
@@ -150,7 +195,7 @@ const ManualCheck = () => {
                   <div className="relative mt-2">
                     <Input
                       id="product-name"
-                      placeholder="e.g., Lay's Potato Chips, Coca-Cola, Fanta"
+                      placeholder="e.g., Lay's Magic Masala, Kurkure, Maggi"
                       value={productName}
                       onChange={(e) => setProductName(e.target.value)}
                       className="pl-10 h-12 text-base"
@@ -158,7 +203,7 @@ const ManualCheck = () => {
                     <Search className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Try: Lay's, Coca-Cola, Fanta, Doritos, KitKat
+                    Try: Lays, Kurkure, Thums Up, Frooti, Haldiram, Parle, Maggi, Amul
                   </p>
                 </div>
                 
@@ -344,7 +389,7 @@ const ManualCheck = () => {
                   </div>
                   <h3 className="text-xl font-medium mb-2">No Product Selected</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    Enter a product name and click "Check Product" to see a detailed analysis of potentially harmful ingredients.
+                    Enter a popular Indian snack or beverage name and click "Check Product" to see a detailed analysis of potentially harmful ingredients.
                   </p>
                 </div>
               </div>

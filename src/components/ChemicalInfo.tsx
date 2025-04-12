@@ -1,15 +1,20 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LineChart, Line, CartesianGrid, Scatter, ScatterChart, ZAxis } from "recharts";
+import { 
+  PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, 
+  Tooltip, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, 
+  LineChart, Line, CartesianGrid, Scatter, ScatterChart, ZAxis, Area, AreaChart,
+  ComposedChart, Treemap
+} from "recharts";
 import { ChemicalCircle, ChemicalSlider } from "@/components/ChemicalVisualizers";
 
 const commonChemicals = [
-  { name: "MSG (Monosodium Glutamate)", level: "High", risk: "Medium", description: "Flavor enhancer that may cause headaches or discomfort in some people." },
-  { name: "TBHQ", level: "Medium", risk: "High", description: "Preservative that prevents oils from going rancid, linked to potential health concerns." },
-  { name: "Sodium Nitrite", level: "Low", risk: "High", description: "Preservative in processed meats, linked to increased cancer risk." },
-  { name: "Artificial Food Coloring", level: "High", risk: "Medium", description: "Dyes that may contain carcinogens or cause hyperactivity in children." },
-  { name: "BHA & BHT", level: "Medium", risk: "Medium", description: "Preservatives that may affect the neurological system or trigger allergic reactions." }
+  { name: "MSG (Monosodium Glutamate)", level: "High", risk: "Medium", description: "Flavor enhancer commonly found in namkeen and packaged snacks that may cause headaches." },
+  { name: "TBHQ", level: "Medium", risk: "High", description: "Preservative in fried snacks like bhujia and chips, linked to potential health concerns." },
+  { name: "Sodium Nitrite", level: "Low", risk: "High", description: "Preservative in packaged paneer tikka and ready-to-eat meals, linked to increased cancer risk." },
+  { name: "Tartrazine (Yellow 5)", level: "High", risk: "Medium", description: "Artificial color in many Indian sweets and snacks that may trigger allergic reactions." },
+  { name: "BHA & BHT", level: "Medium", risk: "Medium", description: "Preservatives in packaged ghee and oils that may affect the neurological system." }
 ];
 
 const pieChartData = [
@@ -19,28 +24,50 @@ const pieChartData = [
 ];
 
 const barChartData = [
-  { name: "Potato Chips", harmful: 75, safe: 25 },
-  { name: "Soda", harmful: 60, safe: 40 },
-  { name: "Candy", harmful: 80, safe: 20 },
-  { name: "Cookies", harmful: 65, safe: 35 },
-  { name: "Frozen Meals", harmful: 70, safe: 30 }
+  { name: "Namkeen", harmful: 75, safe: 25 },
+  { name: "Soft Drinks", harmful: 60, safe: 40 },
+  { name: "Packaged Sweets", harmful: 80, safe: 20 },
+  { name: "Biscuits", harmful: 65, safe: 35 },
+  { name: "Ready Meals", harmful: 70, safe: 30 }
 ];
 
 const radarChartData = [
-  { subject: "Preservatives", chips: 80, soda: 40, candy: 70, cookies: 65 },
-  { subject: "Artificial Colors", chips: 60, soda: 90, candy: 95, cookies: 50 },
-  { subject: "Flavor Enhancers", chips: 95, soda: 80, candy: 75, cookies: 60 },
-  { subject: "Sweeteners", chips: 30, soda: 95, candy: 90, cookies: 75 },
-  { subject: "Stabilizers", chips: 70, soda: 60, candy: 40, cookies: 65 },
+  { subject: "Preservatives", namkeen: 80, beverages: 40, sweets: 70, biscuits: 65 },
+  { subject: "Artificial Colors", namkeen: 60, beverages: 90, sweets: 95, biscuits: 50 },
+  { subject: "Flavor Enhancers", namkeen: 95, beverages: 80, sweets: 75, biscuits: 60 },
+  { subject: "Sweeteners", namkeen: 30, beverages: 95, sweets: 90, biscuits: 75 },
+  { subject: "Stabilizers", namkeen: 70, beverages: 60, sweets: 40, biscuits: 65 },
 ];
 
 const bubbleData = [
   { name: "MSG", value: 35, popularity: 90, risk: 60 },
   { name: "TBHQ", value: 25, popularity: 70, risk: 80 },
-  { name: "Red 40", value: 40, popularity: 95, risk: 70 },
+  { name: "Yellow 5", value: 40, popularity: 95, risk: 70 },
   { name: "BHA", value: 20, popularity: 60, risk: 75 },
-  { name: "Yellow 5", value: 30, popularity: 80, risk: 65 },
+  { name: "Aspartame", value: 30, popularity: 80, risk: 65 },
   { name: "HFCS", value: 45, popularity: 85, risk: 60 },
+];
+
+const trendData = [
+  { year: "2018", organic: 25, processed: 75 },
+  { year: "2019", organic: 30, processed: 70 },
+  { year: "2020", organic: 38, processed: 62 },
+  { year: "2021", organic: 42, processed: 58 },
+  { year: "2022", organic: 48, processed: 52 },
+  { year: "2023", organic: 55, processed: 45 },
+];
+
+const marketShareData = [
+  { name: "Traditional Snacks", size: 30, color: "#2DD4BF" },
+  { name: "Processed Snacks", size: 70, color: "#EF4444" },
+];
+
+const regionData = [
+  { name: "North", organicConsumption: 40, chemicalExposure: 60 },
+  { name: "South", organicConsumption: 55, chemicalExposure: 45 },
+  { name: "East", organicConsumption: 35, chemicalExposure: 65 },
+  { name: "West", organicConsumption: 50, chemicalExposure: 50 },
+  { name: "Central", organicConsumption: 30, chemicalExposure: 70 },
 ];
 
 const ChemicalInfo = () => {
@@ -48,20 +75,130 @@ const ChemicalInfo = () => {
     <section id="chemicals" className="py-20 px-4 bg-gradient-to-br from-background to-background/50">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Understanding Harmful Chemicals</h2>
+          <h2 className="text-3xl font-bold">Food Chemical Analysis</h2>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Learn about common chemicals found in packaged foods and their potential health impacts.
+            Understand chemicals in common Indian packaged foods and their potential health impacts.
           </p>
         </div>
 
-        <Tabs defaultValue="common" className="max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-5 mb-8">
+        <Tabs defaultValue="trends" className="max-w-5xl mx-auto">
+          <TabsList className="grid w-full grid-cols-6 mb-8">
+            <TabsTrigger value="trends">Market Trends</TabsTrigger>
+            <TabsTrigger value="regional">Regional Data</TabsTrigger>
             <TabsTrigger value="common">Common Chemicals</TabsTrigger>
             <TabsTrigger value="stats">Risk Distribution</TabsTrigger>
             <TabsTrigger value="comparison">Food Comparison</TabsTrigger>
-            <TabsTrigger value="categories">Category Analysis</TabsTrigger>
             <TabsTrigger value="impact">Chemical Impact</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="trends">
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle>Processed vs Organic Food Trends in India</CardTitle>
+                <CardDescription>
+                  Shift in consumption patterns over recent years
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={trendData}
+                      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                      <XAxis dataKey="year" stroke="#999" />
+                      <YAxis stroke="#999" label={{ value: 'Market Share (%)', angle: -90, position: 'insideLeft', fill: '#999' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
+                      <Legend />
+                      <Area type="monotone" dataKey="organic" name="Organic Foods" stackId="1" stroke="#2DD4BF" fill="#2DD4BF" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="processed" name="Processed Foods" stackId="1" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="mt-8">
+                  <h3 className="text-lg font-medium mb-4">Market Share Distribution</h3>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <Treemap
+                        data={marketShareData}
+                        dataKey="size"
+                        stroke="#444"
+                        fill="#8884d8"
+                        content={({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
+                          return (
+                            <g>
+                              <rect
+                                x={x}
+                                y={y}
+                                width={width}
+                                height={height}
+                                style={{
+                                  fill: marketShareData[index].color,
+                                  stroke: '#444',
+                                  strokeWidth: 2,
+                                  strokeOpacity: 1,
+                                }}
+                              />
+                              <text
+                                x={x + width / 2}
+                                y={y + height / 2 - 10}
+                                textAnchor="middle"
+                                fill="#fff"
+                                fontSize={16}
+                                fontWeight="bold"
+                              >
+                                {name}
+                              </text>
+                              <text
+                                x={x + width / 2}
+                                y={y + height / 2 + 10}
+                                textAnchor="middle"
+                                fill="#fff"
+                                fontSize={14}
+                              >
+                                {`${marketShareData[index].size}%`}
+                              </text>
+                            </g>
+                          );
+                        }}
+                      />
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="regional">
+            <Card className="glass-card">
+              <CardHeader>
+                <CardTitle>Regional Food Consumption Patterns</CardTitle>
+                <CardDescription>
+                  Organic food consumption and chemical exposure across Indian regions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart
+                      data={regionData}
+                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                    >
+                      <CartesianGrid stroke="#444" />
+                      <XAxis dataKey="name" stroke="#999" />
+                      <YAxis stroke="#999" label={{ value: 'Percentage (%)', angle: -90, position: 'insideLeft', fill: '#999' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
+                      <Legend />
+                      <Bar dataKey="organicConsumption" name="Organic Food Consumption" barSize={20} fill="#2DD4BF" />
+                      <Line type="monotone" dataKey="chemicalExposure" name="Chemical Exposure" stroke="#EF4444" strokeWidth={2} />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
           
           <TabsContent value="common">
             <div className="grid md:grid-cols-2 gap-6">
@@ -141,13 +278,13 @@ const ChemicalInfo = () => {
               </CardContent>
             </Card>
           </TabsContent>
-          
+
           <TabsContent value="comparison">
             <Card className="glass-card">
               <CardHeader>
                 <CardTitle>Chemical Composition by Food Category</CardTitle>
                 <CardDescription>
-                  Comparing harmful vs. safe ingredients across common snacks
+                  Comparing harmful vs. safe ingredients across common Indian snacks
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -173,34 +310,6 @@ const ChemicalInfo = () => {
                       <Bar dataKey="harmful" name="Potentially Harmful" stackId="a" fill="#EF4444" />
                       <Bar dataKey="safe" name="Generally Safe" stackId="a" fill="#2DD4BF" />
                     </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="categories">
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle>Chemical Profiles by Food Category</CardTitle>
-                <CardDescription>
-                  Comparing chemical presence across different food types
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-96">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart outerRadius={150} data={radarChartData}>
-                      <PolarGrid stroke="#555" />
-                      <PolarAngleAxis dataKey="subject" stroke="#999" />
-                      <PolarRadiusAxis stroke="#999" />
-                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
-                      <Radar name="Potato Chips" dataKey="chips" stroke="#EF4444" fill="#EF4444" fillOpacity={0.3} />
-                      <Radar name="Soda" dataKey="soda" stroke="#FBBF24" fill="#FBBF24" fillOpacity={0.3} />
-                      <Radar name="Candy" dataKey="candy" stroke="#EC4899" fill="#EC4899" fillOpacity={0.3} />
-                      <Radar name="Cookies" dataKey="cookies" stroke="#2DD4BF" fill="#2DD4BF" fillOpacity={0.3} />
-                      <Legend />
-                    </RadarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
@@ -233,7 +342,7 @@ const ChemicalInfo = () => {
                         name="Prevalence" 
                         unit="%" 
                         stroke="#999"
-                        label={{ value: 'Prevalence in Products (%)', position: 'bottom', fill: '#999' }}
+                        label={{ value: 'Prevalence in Indian Products (%)', position: 'bottom', fill: '#999' }}
                       />
                       <YAxis 
                         type="number" 

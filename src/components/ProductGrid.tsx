@@ -18,7 +18,7 @@ type Product = {
 const popularProducts: Product[] = [
   {
     id: 1,
-    name: "Classic Salted Potato Chips",
+    name: "Magic Masala Chips",
     brand: "Lay's",
     category: "Chips",
     image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?q=80&w=1740&auto=format&fit=crop",
@@ -27,7 +27,7 @@ const popularProducts: Product[] = [
   },
   {
     id: 2,
-    name: "Cream & Onion Chips",
+    name: "Cream & Onion Wafers",
     brand: "Balaji",
     category: "Chips",
     image: "https://images.unsplash.com/photo-1613919113640-25632e2d5bd0?q=80&w=1470&auto=format&fit=crop",
@@ -36,8 +36,8 @@ const popularProducts: Product[] = [
   },
   {
     id: 3,
-    name: "Cola",
-    brand: "Coca-Cola",
+    name: "Thums Up",
+    brand: "Coca-Cola India",
     category: "Beverages",
     image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=1365&auto=format&fit=crop",
     riskLevel: "danger",
@@ -45,30 +45,57 @@ const popularProducts: Product[] = [
   },
   {
     id: 4,
-    name: "Orange Soda",
-    brand: "Fanta",
+    name: "Mango Frooti",
+    brand: "Parle Agro",
     category: "Beverages",
     image: "https://images.unsplash.com/photo-1622766815178-641bef2b4630?q=80&w=1287&auto=format&fit=crop",
-    riskLevel: "danger",
-    chemicals: ["Yellow 6", "Red 40", "Sodium Benzoate"]
+    riskLevel: "caution",
+    chemicals: ["Yellow 6", "Sodium Benzoate"]
   },
   {
     id: 5,
-    name: "Chocolate Chip Cookies",
+    name: "Bourbon Biscuits",
     brand: "Britannia",
-    category: "Cookies",
+    category: "Biscuits",
     image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=1464&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["TBHQ", "Artificial Flavors"]
   },
   {
     id: 6,
-    name: "Fruit Cereal",
-    brand: "Kellogg's",
-    category: "Breakfast",
+    name: "Kurkure Masala Munch",
+    brand: "PepsiCo India",
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1600952841320-db92ec4047ca?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "danger",
+    chemicals: ["MSG", "Acidity Regulators", "Artificial Colors"]
+  },
+  {
+    id: 7,
+    name: "Aloo Bhujia",
+    brand: "Haldiram's",
+    category: "Snacks",
+    image: "https://images.unsplash.com/photo-1612196808214-3d7f8d3f3e80?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "caution",
+    chemicals: ["Acidity Regulators", "Antioxidants"]
+  },
+  {
+    id: 8,
+    name: "Fruit Chaat Mixture",
+    brand: "MTR Foods",
+    category: "Snacks",
     image: "https://images.unsplash.com/photo-1521483451569-e33803c3f2b5?q=80&w=1470&auto=format&fit=crop",
     riskLevel: "safe",
     chemicals: []
+  },
+  {
+    id: 9,
+    name: "Marie Gold Biscuits",
+    brand: "Britannia",
+    category: "Biscuits",
+    image: "https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?q=80&w=1300&auto=format&fit=crop",
+    riskLevel: "safe",
+    chemicals: ["Emulsifiers"]
   }
 ];
 
