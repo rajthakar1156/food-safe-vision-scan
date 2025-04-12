@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-primary/10 to-background">
+    <section className="py-20 px-4 gradient-bg">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="md:w-1/2 space-y-6">
@@ -22,7 +22,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-white"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 onClick={() => document.getElementById('scan')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Scan Now
@@ -54,20 +54,20 @@ const Hero = () => {
           <div className="md:w-1/2 relative">
             <div className="relative w-full aspect-square max-w-md mx-auto">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary rounded-3xl -rotate-6"></div>
-              <div className="absolute inset-0 bg-white rounded-3xl shadow-lg flex items-center justify-center p-6">
-                <div className="w-full max-w-xs aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden relative">
+              <div className="absolute inset-0 glass-card rounded-3xl shadow-lg flex items-center justify-center p-6">
+                <div className="w-full max-w-xs aspect-[3/4] bg-black/30 rounded-xl overflow-hidden relative">
                   <img 
                     src="https://images.unsplash.com/photo-1619566215014-4041f49eacad?q=80&w=1887&auto=format&fit=crop" 
                     alt="Packaged chips" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-80 mix-blend-luminosity"
                   />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/20">
+                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/40">
                     <div className="w-full h-24 bg-primary/30 backdrop-blur-sm relative overflow-hidden">
                       <div className="h-1 w-full bg-primary absolute animate-scan"></div>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm w-3/4 mt-4 p-3 rounded-lg text-sm">
+                    <div className="glass-card w-3/4 mt-4 p-3 rounded-lg text-sm">
                       <div className="font-semibold">Scanning...</div>
-                      <div className="h-2 bg-gray-200 rounded-full mt-1">
+                      <div className="h-2 bg-black/30 rounded-full mt-1">
                         <div className="h-2 bg-primary rounded-full w-2/3 animate-pulse-slow"></div>
                       </div>
                     </div>
