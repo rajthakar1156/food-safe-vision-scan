@@ -21,7 +21,7 @@ const popularProducts: Product[] = [
     name: "Magic Masala Chips",
     brand: "Lay's",
     category: "Chips",
-    image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?q=80&w=1740&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1613919113640-25632e2d5bd0?q=80&w=1470&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["Artificial Flavors", "Sodium Diacetate", "Yellow 5"]
   },
@@ -30,7 +30,7 @@ const popularProducts: Product[] = [
     name: "Cream & Onion Wafers",
     brand: "Balaji",
     category: "Chips",
-    image: "https://images.unsplash.com/photo-1613919113640-25632e2d5bd0?q=80&w=1470&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "danger",
     chemicals: ["MSG", "TBHQ", "Red 40", "BHA"]
   },
@@ -39,7 +39,7 @@ const popularProducts: Product[] = [
     name: "Thums Up",
     brand: "Coca-Cola India",
     category: "Beverages",
-    image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=1365&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "danger",
     chemicals: ["Phosphoric Acid", "Caramel Color", "High Fructose Corn Syrup"]
   },
@@ -48,7 +48,7 @@ const popularProducts: Product[] = [
     name: "Mango Frooti",
     brand: "Parle Agro",
     category: "Beverages",
-    image: "https://images.unsplash.com/photo-1622766815178-641bef2b4630?q=80&w=1287&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1571913384368-69177288b9c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "caution",
     chemicals: ["Yellow 6", "Sodium Benzoate"]
   },
@@ -57,7 +57,7 @@ const popularProducts: Product[] = [
     name: "Bourbon Biscuits",
     brand: "Britannia",
     category: "Biscuits",
-    image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=1464&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1615588835104-ad9ea6c2e3f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "caution",
     chemicals: ["TBHQ", "Artificial Flavors"]
   },
@@ -66,7 +66,7 @@ const popularProducts: Product[] = [
     name: "Kurkure Masala Munch",
     brand: "PepsiCo India",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1600952841320-db92ec4047ca?q=80&w=1287&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "danger",
     chemicals: ["MSG", "Acidity Regulators", "Artificial Colors"]
   },
@@ -75,27 +75,54 @@ const popularProducts: Product[] = [
     name: "Aloo Bhujia",
     brand: "Haldiram's",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1612196808214-3d7f8d3f3e80?q=80&w=1287&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1589731119540-8f93f4072723?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "caution",
     chemicals: ["Acidity Regulators", "Antioxidants"]
   },
   {
     id: 8,
-    name: "Fruit Chaat Mixture",
-    brand: "MTR Foods",
-    category: "Snacks",
-    image: "https://images.unsplash.com/photo-1521483451569-e33803c3f2b5?q=80&w=1470&auto=format&fit=crop",
-    riskLevel: "safe",
-    chemicals: []
+    name: "Maggi Noodles",
+    brand: "Nestlé",
+    category: "Noodles",
+    image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "danger",
+    chemicals: ["TBHQ", "Sodium Glutamate", "Hydrolyzed Proteins"]
   },
   {
     id: 9,
     name: "Marie Gold Biscuits",
     brand: "Britannia",
     category: "Biscuits",
-    image: "https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?q=80&w=1300&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1610354559669-d258b5faa76b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
     riskLevel: "safe",
     chemicals: ["Emulsifiers"]
+  },
+  {
+    id: 10,
+    name: "Cadbury Dairy Milk",
+    brand: "Mondelēz International",
+    category: "Chocolate",
+    image: "https://images.unsplash.com/photo-1626697556362-a440cf876b6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    riskLevel: "caution",
+    chemicals: ["Emulsifiers", "Artificial Flavors"]
+  },
+  {
+    id: 11,
+    name: "Ching's Hakka Noodles",
+    brand: "Capital Foods",
+    category: "Noodles",
+    image: "https://images.unsplash.com/photo-1617622141573-83519d598838?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    riskLevel: "caution",
+    chemicals: ["TBHQ", "Sodium Metabisulphite"]
+  },
+  {
+    id: 12,
+    name: "Amul Kool Milk",
+    brand: "Amul",
+    category: "Beverages",
+    image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "safe",
+    chemicals: ["Stabilizers"]
   }
 ];
 
@@ -112,9 +139,9 @@ const ProductGrid = () => {
     <section id="products" className="py-20 px-4 gradient-bg">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Popular Products Analysis</h2>
+          <h2 className="text-3xl font-bold">Popular Indian Products Analysis</h2>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Explore our database of common packaged food products and their chemical composition.
+            Explore our database of common Indian packaged food products and their chemical composition.
           </p>
         </div>
 
