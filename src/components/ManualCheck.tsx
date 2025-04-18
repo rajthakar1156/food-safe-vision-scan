@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Image, Check, AlertCircle, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,18 @@ import {
   Bar
 } from "recharts";
 import { productDatabase } from "@/types/chemical";
+
+// Define CustomTooltip component for Recharts
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background border border-border p-2 rounded-md shadow-md">
+        <p className="font-medium">{`${payload[0].name}: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 // More accurate product images for Indian products
 const PRODUCT_IMAGES = {
@@ -58,10 +71,26 @@ const findProductMatch = (input: string): string | null => {
   return null;
 };
 
+interface ProductResult {
+  id: number;
+  name: string;
+  brand: string;
+  category: string;
+  image: string;
+  riskLevel: "low" | "medium" | "high";
+  chemicals: string[];
+  healthInfo: any;
+  overallRisk?: "low" | "medium" | "high";
+  safeIngredients: string[];
+  cautionIngredients: string[];
+  harmfulIngredients: string[];
+  nutritionalInfo?: any;
+}
+
 const ManualCheck = () => {
   const [productName, setProductName] = useState("");
   const [isChecking, setIsChecking] = useState(false);
-  const [result, setResult<any>(null);
+  const [result, setResult] = useState<ProductResult | null>(null);
   const { toast } = useToast();
 
   const handleCheck = (e: React.FormEvent) => {
@@ -86,6 +115,12 @@ const ManualCheck = () => {
           riskLevel: matchedProduct.riskLevel,
           chemicals: matchedProduct.chemicals,
           healthInfo: matchedProduct.healthInfo,
+          // Simulate more data based on chemicals
+          overallRisk: matchedProduct.riskLevel,
+          safeIngredients: ["Natural flavors", "Salt", "Potato starch"],
+          cautionIngredients: ["Edible oil", "Modified starch"],
+          harmfulIngredients: matchedProduct.chemicals || [],
+          nutritionalInfo: matchedProduct.healthInfo?.nutritionalValue
         });
         
         toast({
@@ -109,14 +144,14 @@ const ManualCheck = () => {
     if (!info) return [];
     
     return [
-      { name: 'Calories', value: info.calories },
-      { name: 'Fat (g)', value: info.fat },
-      { name: 'Sodium (mg)', value: info.sodium },
-      { name: 'Carbs (g)', value: info.carbs }
+      { name: 'Calories', value: info.calories || 0 },
+      { name: 'Fat (g)', value: info.fat || 0 },
+      { name: 'Carbs (g)', value: info.carbs || 0 },
+      { name: 'Protein (g)', value: info.protein || 0 }
     ];
   };
 
-  const getIngredientChartData = (result: any) => {
+  const getIngredientChartData = (result: ProductResult) => {
     if (!result) return [];
     
     return [
@@ -258,10 +293,10 @@ const ManualCheck = () => {
                   <div 
                     className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium ${
                       result.riskLevel === "high" 
-                        ? "bg-danger/80 text-white" 
+                        ? "bg-red-500/80 text-white" 
                         : result.riskLevel === "medium" 
-                          ? "bg-caution/80 text-black" 
-                          : "bg-safe/80 text-black"
+                          ? "bg-yellow-500/80 text-black" 
+                          : "bg-green-500/80 text-black"
                     }`}
                   >
                     {result.riskLevel === "high" 
@@ -288,10 +323,10 @@ const ManualCheck = () => {
                         <div 
                           className={`h-full ${
                             result.overallRisk === "high" 
-                              ? "bg-danger w-4/5" 
+                              ? "bg-red-500 w-4/5" 
                               : result.overallRisk === "medium" 
-                                ? "bg-caution w-1/2" 
-                                : "bg-safe w-1/5"
+                                ? "bg-yellow-500 w-1/2" 
+                                : "bg-green-500 w-1/5"
                           }`}
                         ></div>
                       </div>
@@ -300,14 +335,14 @@ const ManualCheck = () => {
                     <div className="space-y-3">
                       <div>
                         <h4 className="text-sm flex items-center">
-                          <Check className="h-4 w-4 text-safe mr-1" />
+                          <Check className="h-4 w-4 text-green-500 mr-1" />
                           Safe Ingredients:
                         </h4>
                         <div className="flex flex-wrap gap-2 mt-1">
                           {result.safeIngredients.map((ingredient: string, i: number) => (
                             <span 
                               key={i} 
-                              className="px-2 py-1 bg-safe/10 text-safe rounded-full text-xs"
+                              className="px-2 py-1 bg-green-500/10 text-green-500 rounded-full text-xs"
                             >
                               {ingredient}
                             </span>
@@ -317,14 +352,14 @@ const ManualCheck = () => {
                       
                       <div>
                         <h4 className="text-sm flex items-center">
-                          <AlertCircle className="h-4 w-4 text-caution mr-1" />
+                          <AlertCircle className="h-4 w-4 text-yellow-500 mr-1" />
                           Use with Caution:
                         </h4>
                         <div className="flex flex-wrap gap-2 mt-1">
                           {result.cautionIngredients.map((ingredient: string, i: number) => (
                             <span 
                               key={i} 
-                              className="px-2 py-1 bg-caution/10 text-caution rounded-full text-xs"
+                              className="px-2 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs"
                             >
                               {ingredient}
                             </span>
@@ -334,14 +369,14 @@ const ManualCheck = () => {
                       
                       <div>
                         <h4 className="text-sm flex items-center">
-                          <AlertCircle className="h-4 w-4 text-danger mr-1" />
+                          <AlertCircle className="h-4 w-4 text-red-500 mr-1" />
                           Potentially Harmful:
                         </h4>
                         <div className="flex flex-wrap gap-2 mt-1">
                           {result.harmfulIngredients.map((ingredient: string, i: number) => (
                             <span 
                               key={i} 
-                              className="px-2 py-1 bg-danger/10 text-danger rounded-full text-xs"
+                              className="px-2 py-1 bg-red-500/10 text-red-500 rounded-full text-xs"
                             >
                               {ingredient}
                             </span>
