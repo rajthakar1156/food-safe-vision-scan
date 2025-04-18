@@ -70,6 +70,47 @@ const regionData = [
   { name: "Central", organicConsumption: 30, chemicalExposure: 70 },
 ];
 
+// Custom component for Treemap content
+const TreemapCustomContent = (props: any) => {
+  const { root, depth, x, y, width, height, index, payload, colors, rank, name } = props;
+  
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{
+          fill: marketShareData[index].color,
+          stroke: '#444',
+          strokeWidth: 2,
+          strokeOpacity: 1,
+        }}
+      />
+      <text
+        x={x + width / 2}
+        y={y + height / 2 - 10}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={16}
+        fontWeight="bold"
+      >
+        {name}
+      </text>
+      <text
+        x={x + width / 2}
+        y={y + height / 2 + 10}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={14}
+      >
+        {`${marketShareData[index].size}%`}
+      </text>
+    </g>
+  );
+};
+
 const ChemicalInfo = () => {
   return (
     <section id="chemicals" className="py-20 px-4 bg-gradient-to-br from-background to-background/50">
@@ -126,43 +167,7 @@ const ChemicalInfo = () => {
                         dataKey="size"
                         stroke="#444"
                         fill="#8884d8"
-                        content={({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
-                          return (
-                            <g>
-                              <rect
-                                x={x}
-                                y={y}
-                                width={width}
-                                height={height}
-                                style={{
-                                  fill: marketShareData[index].color,
-                                  stroke: '#444',
-                                  strokeWidth: 2,
-                                  strokeOpacity: 1,
-                                }}
-                              />
-                              <text
-                                x={x + width / 2}
-                                y={y + height / 2 - 10}
-                                textAnchor="middle"
-                                fill="#fff"
-                                fontSize={16}
-                                fontWeight="bold"
-                              >
-                                {name}
-                              </text>
-                              <text
-                                x={x + width / 2}
-                                y={y + height / 2 + 10}
-                                textAnchor="middle"
-                                fill="#fff"
-                                fontSize={14}
-                              >
-                                {`${marketShareData[index].size}%`}
-                              </text>
-                            </g>
-                          );
-                        }}
+                        content={<TreemapCustomContent />}
                       />
                     </ResponsiveContainer>
                   </div>
