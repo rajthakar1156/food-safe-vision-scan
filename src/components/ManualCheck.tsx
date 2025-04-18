@@ -1,11 +1,10 @@
-
 import { useState } from "react";
-import { Search, Image, Check, AlertCircle, ShieldCheck } from "lucide-react";
+import { Image, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import ProductSearchInput from "./ProductSearchInput";
 import { 
   AreaChart, 
   Area, 
@@ -189,15 +188,16 @@ const ManualCheck = () => {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="product-name" className="text-lg">Product Name</Label>
-                  <div className="relative mt-2">
-                    <Input
-                      id="product-name"
-                      placeholder="e.g., Lay's Magic Masala, Kurkure, Maggi"
+                  <div className="mt-2">
+                    <ProductSearchInput
                       value={productName}
-                      onChange={(e) => setProductName(e.target.value)}
-                      className="pl-10 h-12 text-base"
+                      onChange={setProductName}
+                      onSelect={(value) => {
+                        setProductName(value);
+                        const form = document.querySelector('form');
+                        if (form) form.requestSubmit();
+                      }}
                     />
-                    <Search className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Try: Lays, Kurkure, Thums Up, Frooti, Haldiram, Parle, Maggi, Amul, Britannia, MTR, Dabur, Cadbury, Ching's
@@ -215,10 +215,7 @@ const ManualCheck = () => {
                       Analyzing...
                     </div>
                   ) : (
-                    <>
-                      <Search className="mr-2 h-5 w-5" />
-                      Check Product
-                    </>
+                    <>Check Product</>
                   )}
                 </Button>
               </div>
