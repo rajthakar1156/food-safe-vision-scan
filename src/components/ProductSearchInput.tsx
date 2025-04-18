@@ -45,25 +45,27 @@ const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputPro
             <Search className="absolute left-3 top-3.5 h-5 w-5 text-muted-foreground" />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-[--trigger-width]" align="start">
-          <Command>
-            <CommandInput placeholder="Search products..." />
-            <CommandEmpty>No product found.</CommandEmpty>
-            <CommandGroup>
+        <PopoverContent className="p-0 w-[300px] md:w-[400px]" align="start">
+          {suggestions.length > 0 ? (
+            <div className="max-h-[300px] overflow-auto p-2">
               {suggestions.map((product) => (
-                <CommandItem
+                <div
                   key={product}
-                  value={product}
-                  onSelect={(value) => {
-                    onSelect(value);
+                  className="flex items-center gap-2 p-2 hover:bg-muted cursor-pointer rounded-md"
+                  onClick={() => {
+                    onSelect(product);
                     setOpen(false);
                   }}
                 >
                   {productDatabase[product]?.name || product}
-                </CommandItem>
+                </div>
               ))}
-            </CommandGroup>
-          </Command>
+            </div>
+          ) : (
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              No product found.
+            </div>
+          )}
         </PopoverContent>
       </Popover>
     </div>
