@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -8,6 +7,8 @@ import {
   ComposedChart, Treemap
 } from "recharts";
 import { ChemicalCircle, ChemicalSlider } from "@/components/ChemicalVisualizers";
+import ChemicalDetails from "@/components/ChemicalDetails";
+import { chemicalData } from "@/types/chemical";
 
 const commonChemicals = [
   { name: "MSG (Monosodium Glutamate)", level: "High", risk: "Medium", description: "Flavor enhancer commonly found in namkeen and packaged snacks that may cause headaches." },
@@ -70,7 +71,6 @@ const regionData = [
   { name: "Central", organicConsumption: 30, chemicalExposure: 70 },
 ];
 
-// Custom component for Treemap content
 const TreemapCustomContent = (props: any) => {
   const { root, depth, x, y, width, height, index, payload, colors, rank, name } = props;
   
@@ -123,13 +123,14 @@ const ChemicalInfo = () => {
         </div>
 
         <Tabs defaultValue="trends" className="max-w-5xl mx-auto">
-          <TabsList className="grid w-full grid-cols-6 mb-8">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
             <TabsTrigger value="trends">Market Trends</TabsTrigger>
             <TabsTrigger value="regional">Regional Data</TabsTrigger>
             <TabsTrigger value="common">Common Chemicals</TabsTrigger>
             <TabsTrigger value="stats">Risk Distribution</TabsTrigger>
             <TabsTrigger value="comparison">Food Comparison</TabsTrigger>
             <TabsTrigger value="impact">Chemical Impact</TabsTrigger>
+            <TabsTrigger value="details">Health Details</TabsTrigger>
           </TabsList>
 
           <TabsContent value="trends">
@@ -390,6 +391,14 @@ const ChemicalInfo = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="details">
+            <div className="grid gap-6">
+              {chemicalData.map((chemical, index) => (
+                <ChemicalDetails key={index} chemical={chemical} />
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
