@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Image, Check, AlertCircle, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import {
   BarChart,
   Bar
 } from "recharts";
+import { productDatabase } from "@/types/chemical";
 
 // More accurate product images for Indian products
 const PRODUCT_IMAGES = {
@@ -36,207 +36,32 @@ const PRODUCT_IMAGES = {
   "default": "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1305&auto=format&fit=crop"
 };
 
-const SAMPLE_PRODUCTS = {
-  "lays": {
-    name: "Lay's Magic Masala",
-    brand: "Lay's India",
-    safeIngredients: ["Potatoes", "Vegetable Oil", "Salt"],
-    cautionIngredients: ["Natural Flavors", "Citric Acid"],
-    harmfulIngredients: ["Yellow 5", "TBHQ", "Sodium Diacetate"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 160,
-      fat: 10,
-      sodium: 170,
-      carbs: 15,
-    }
-  },
-  "kurkure": {
-    name: "Kurkure Masala Munch",
-    brand: "PepsiCo India",
-    safeIngredients: ["Rice Meal", "Edible Vegetable Oil", "Corn Meal"],
-    cautionIngredients: ["Spice Mix", "Salt"],
-    harmfulIngredients: ["MSG", "Acidity Regulators", "Artificial Colors"],
-    overallRisk: "high",
-    nutritionalInfo: {
-      calories: 170,
-      fat: 9,
-      sodium: 190,
-      carbs: 18,
-    }
-  },
-  "thums up": {
-    name: "Thums Up",
-    brand: "Coca-Cola India",
-    safeIngredients: ["Carbonated Water", "Caffeine"],
-    cautionIngredients: ["Caramel Color", "Natural Flavors"],
-    harmfulIngredients: ["High Fructose Corn Syrup", "Phosphoric Acid"],
-    overallRisk: "high",
-    nutritionalInfo: {
-      calories: 140,
-      fat: 0,
-      sodium: 45,
-      carbs: 39,
-    }
-  },
-  "frooti": {
-    name: "Mango Frooti",
-    brand: "Parle Agro",
-    safeIngredients: ["Water", "Mango Pulp", "Sugar"],
-    cautionIngredients: ["Acidity Regulators", "Flavor"],
-    harmfulIngredients: ["Artificial Colors", "Sodium Benzoate"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 130,
-      fat: 0,
-      sodium: 30,
-      carbs: 32,
-    }
-  },
-  "haldiram": {
-    name: "Haldiram's Aloo Bhujia",
-    brand: "Haldiram's",
-    safeIngredients: ["Gram Flour", "Potato", "Vegetable Oil", "Salt"],
-    cautionIngredients: ["Spices", "Mango Powder"],
-    harmfulIngredients: ["Acidity Regulators", "Antioxidants"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 150,
-      fat: 8,
-      sodium: 180,
-      carbs: 16,
-    }
-  },
-  "parle": {
-    name: "Parle-G Biscuits",
-    brand: "Parle Products",
-    safeIngredients: ["Wheat Flour", "Sugar", "Edible Vegetable Oil"],
-    cautionIngredients: ["Invert Syrup", "Leavening Agents"],
-    harmfulIngredients: ["Artificial Flavors", "Emulsifiers"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 120,
-      fat: 5,
-      sodium: 40,
-      carbs: 20,
-    }
-  },
-  "maggi": {
-    name: "Maggi 2-Minute Noodles",
-    brand: "Nestlé India",
-    safeIngredients: ["Wheat Flour", "Palm Oil", "Salt"],
-    cautionIngredients: ["Wheat Gluten", "Sugar"],
-    harmfulIngredients: ["TBHQ", "Taste Enhancers", "Hydrolyzed Proteins"],
-    overallRisk: "high",
-    nutritionalInfo: {
-      calories: 180,
-      fat: 8,
-      sodium: 340,
-      carbs: 25,
-    }
-  },
-  "amul": {
-    name: "Amul Kool Milk",
-    brand: "Gujarat Cooperative Milk Marketing Federation",
-    safeIngredients: ["Milk Solids", "Sugar", "Cocoa Solids"],
-    cautionIngredients: ["Stabilizers", "Emulsifiers"],
-    harmfulIngredients: ["Artificial Flavors"],
-    overallRisk: "low",
-    nutritionalInfo: {
-      calories: 140,
-      fat: 3,
-      sodium: 80,
-      carbs: 22,
-    }
-  },
-  "britannia": {
-    name: "Britannia Good Day",
-    brand: "Britannia Industries",
-    safeIngredients: ["Wheat Flour", "Sugar", "Vegetable Oil"],
-    cautionIngredients: ["Raising Agents", "Milk Solids"],
-    harmfulIngredients: ["Artificial Flavors", "Emulsifiers"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 140,
-      fat: 7,
-      sodium: 65,
-      carbs: 19,
-    }
-  },
-  "mtc": {
-    name: "MTR Sambar Powder",
-    brand: "MTR Foods",
-    safeIngredients: ["Coriander", "Turmeric", "Cumin", "Fenugreek"],
-    cautionIngredients: ["Salt"],
-    harmfulIngredients: [],
-    overallRisk: "low",
-    nutritionalInfo: {
-      calories: 30,
-      fat: 1,
-      sodium: 150,
-      carbs: 5,
-    }
-  },
-  "dabur": {
-    name: "Dabur Honey",
-    brand: "Dabur India",
-    safeIngredients: ["Honey"],
-    cautionIngredients: [],
-    harmfulIngredients: [],
-    overallRisk: "low",
-    nutritionalInfo: {
-      calories: 60,
-      fat: 0,
-      sodium: 5,
-      carbs: 17,
-    }
-  },
-  "cadbury": {
-    name: "Cadbury Dairy Milk",
-    brand: "Mondelēz International",
-    safeIngredients: ["Milk Solids", "Cocoa Butter", "Cocoa Mass"],
-    cautionIngredients: ["Sugar", "Vegetable Fats"],
-    harmfulIngredients: ["Emulsifiers", "Artificial Flavors"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 230,
-      fat: 13,
-      sodium: 50,
-      carbs: 25,
-    }
-  },
-  "ching's": {
-    name: "Ching's Secret Hakka Noodles",
-    brand: "Capital Foods",
-    safeIngredients: ["Wheat Flour", "Salt"],
-    cautionIngredients: ["Palm Oil", "Wheat Gluten"],
-    harmfulIngredients: ["TBHQ", "Sodium Metabisulphite"],
-    overallRisk: "medium",
-    nutritionalInfo: {
-      calories: 160,
-      fat: 7,
-      sodium: 290,
-      carbs: 22,
-    }
-  }
+const normalizeProductName = (name: string): string => {
+  return name.toLowerCase().trim();
 };
 
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="glass-card p-2 text-xs">
-        <p>{`${payload[0].name} : ${payload[0].value}`}</p>
-      </div>
-    );
+const findProductMatch = (input: string): string | null => {
+  const normalized = normalizeProductName(input);
+  
+  // Direct match
+  if (normalized in productDatabase) {
+    return normalized;
   }
-
+  
+  // Partial match
+  for (const key of Object.keys(productDatabase)) {
+    if (key.includes(normalized) || normalized.includes(key)) {
+      return key;
+    }
+  }
+  
   return null;
 };
 
 const ManualCheck = () => {
   const [productName, setProductName] = useState("");
   const [isChecking, setIsChecking] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult<any>(null);
   const { toast } = useToast();
 
   const handleCheck = (e: React.FormEvent) => {
@@ -248,24 +73,29 @@ const ManualCheck = () => {
     
     // Simulate processing
     setTimeout(() => {
-      const normalizedInput = productName.toLowerCase();
-      const productKey = Object.keys(SAMPLE_PRODUCTS).find(key => 
-        normalizedInput.includes(key) || key.includes(normalizedInput)
-      );
+      const productKey = findProductMatch(productName);
       
       if (productKey) {
+        const matchedProduct = productDatabase[productKey];
         setResult({
-          ...SAMPLE_PRODUCTS[productKey as keyof typeof SAMPLE_PRODUCTS],
-          imageUrl: PRODUCT_IMAGES[productKey as keyof typeof PRODUCT_IMAGES] || PRODUCT_IMAGES.default
+          id: Math.random(),
+          name: matchedProduct.name,
+          brand: matchedProduct.brand,
+          category: matchedProduct.category,
+          image: matchedProduct.image,
+          riskLevel: matchedProduct.riskLevel,
+          chemicals: matchedProduct.chemicals,
+          healthInfo: matchedProduct.healthInfo,
         });
+        
         toast({
           title: "Product found!",
-          description: `We've analyzed ${SAMPLE_PRODUCTS[productKey as keyof typeof SAMPLE_PRODUCTS].name}.`,
+          description: `We've analyzed ${matchedProduct.name}.`,
         });
       } else {
         toast({
           title: "Product not found",
-          description: "Try entering a common Indian brand like Lays, Kurkure, Thums Up, Frooti, Haldiram, Parle, Maggi, or Amul",
+          description: "Try entering a popular Indian brand like Britannia, Parle-G, Lay's, or Balaji",
           variant: "destructive",
         });
         setResult(null);
@@ -421,22 +251,22 @@ const ManualCheck = () => {
               <Card className="glass-card overflow-hidden h-full">
                 <div className="aspect-video w-full overflow-hidden relative">
                   <img 
-                    src={result.imageUrl} 
+                    src={result.image} 
                     alt={result.name}
                     className="w-full h-64 object-cover"
                   />
                   <div 
                     className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium ${
-                      result.overallRisk === "high" 
+                      result.riskLevel === "high" 
                         ? "bg-danger/80 text-white" 
-                        : result.overallRisk === "medium" 
+                        : result.riskLevel === "medium" 
                           ? "bg-caution/80 text-black" 
                           : "bg-safe/80 text-black"
                     }`}
                   >
-                    {result.overallRisk === "high" 
+                    {result.riskLevel === "high" 
                       ? "High Risk" 
-                      : result.overallRisk === "medium" 
+                      : result.riskLevel === "medium" 
                         ? "Medium Risk" 
                         : "Low Risk"
                     }
