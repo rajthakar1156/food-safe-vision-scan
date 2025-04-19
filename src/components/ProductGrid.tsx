@@ -29,7 +29,7 @@ const popularProducts: Product[] = [
     name: "Cream & Onion Wafers",
     brand: "Balaji",
     category: "Chips",
-    image: "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?q=80&w=1064&auto=format&fit=crop",
     riskLevel: "danger",
     chemicals: ["MSG", "TBHQ", "Red 40", "BHA"]
   },
@@ -38,7 +38,7 @@ const popularProducts: Product[] = [
     name: "Thums Up",
     brand: "Coca-Cola India",
     category: "Beverages",
-    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?q=80&w=1287&auto=format&fit=crop",
     riskLevel: "danger",
     chemicals: ["Phosphoric Acid", "Caramel Color", "High Fructose Corn Syrup"]
   },
@@ -47,7 +47,7 @@ const popularProducts: Product[] = [
     name: "Mango Frooti",
     brand: "Parle Agro",
     category: "Beverages",
-    image: "https://images.unsplash.com/photo-1571913384368-69177288b9c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=1287&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["Yellow 6", "Sodium Benzoate"]
   },
@@ -56,7 +56,7 @@ const popularProducts: Product[] = [
     name: "Bourbon Biscuits",
     brand: "Britannia",
     category: "Biscuits",
-    image: "https://images.unsplash.com/photo-1615588835104-ad9ea6c2e3f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1587940796248-6bf7c56a5e04?q=80&w=1287&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["TBHQ", "Artificial Flavors"]
   },
@@ -65,7 +65,7 @@ const popularProducts: Product[] = [
     name: "Kurkure Masala Munch",
     brand: "PepsiCo India",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1599490659127-9ddf9882f935?q=80&w=1064&auto=format&fit=crop",
     riskLevel: "danger",
     chemicals: ["MSG", "Acidity Regulators", "Artificial Colors"]
   },
@@ -74,7 +74,7 @@ const popularProducts: Product[] = [
     name: "Aloo Bhujia",
     brand: "Haldiram's",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1589731119540-8f93f4072723?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1589639832573-d3c980a0476e?q=80&w=1287&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["Acidity Regulators", "Antioxidants"]
   },
@@ -92,7 +92,7 @@ const popularProducts: Product[] = [
     name: "Marie Gold Biscuits",
     brand: "Britannia",
     category: "Biscuits",
-    image: "https://images.unsplash.com/photo-1610354559669-d258b5faa76b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1287&auto=format&fit=crop",
     riskLevel: "safe",
     chemicals: ["Emulsifiers"]
   },
@@ -101,7 +101,7 @@ const popularProducts: Product[] = [
     name: "Cadbury Dairy Milk",
     brand: "Mondelēz International",
     category: "Chocolate",
-    image: "https://images.unsplash.com/photo-1626697556362-a440cf876b6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1623341214825-9f4f963727da?q=80&w=1470&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["Emulsifiers", "Artificial Flavors"]
   },
@@ -110,7 +110,7 @@ const popularProducts: Product[] = [
     name: "Ching's Hakka Noodles",
     brand: "Capital Foods",
     category: "Noodles",
-    image: "https://images.unsplash.com/photo-1617622141573-83519d598838?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1634864572872-ace433219053?q=80&w=1334&auto=format&fit=crop",
     riskLevel: "caution",
     chemicals: ["TBHQ", "Sodium Metabisulphite"]
   },
