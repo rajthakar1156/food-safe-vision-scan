@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { AlertCircle, ShieldCheck, ExternalLink } from "lucide-react";
+import { AlertCircle, ShieldCheck, ExternalLink, Star } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -126,6 +125,40 @@ const popularProducts: Product[] = [
   }
 ];
 
+const getStarRating = (riskLevel: string, chemicals: string[]): number => {
+  switch (riskLevel) {
+    case "safe":
+      return chemicals.length === 0 ? 5 : 4.5;
+    case "caution":
+      return chemicals.length <= 2 ? 4 : 3;
+    case "danger":
+      return chemicals.length <= 2 ? 2 : 1;
+    default:
+      return 3;
+  }
+};
+
+const StarRating = ({ rating }: { rating: number }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  const emptyStars = 5 - Math.ceil(rating);
+
+  return (
+    <div className="flex items-center gap-0.5">
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={`full-${i}`} className="h-4 w-4 fill-primary text-primary" />
+      ))}
+      {hasHalfStar && (
+        <Star className="h-4 w-4 fill-primary text-primary" strokeWidth={1} />
+      )}
+      {[...Array(emptyStars)].map((_, i) => (
+        <Star key={`empty-${i}`} className="h-4 w-4 text-muted-foreground" />
+      ))}
+      <span className="ml-1 text-sm text-muted-foreground">{rating.toFixed(1)}</span>
+    </div>
+  );
+};
+
 const ProductGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -199,6 +232,7 @@ const ProductGrid = () => {
                     <CardTitle className="text-xl">{product.name}</CardTitle>
                   </div>
                 </div>
+                <StarRating rating={getStarRating(product.riskLevel, product.chemicals)} />
               </CardHeader>
               
               <CardContent>
