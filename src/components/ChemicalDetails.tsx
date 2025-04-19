@@ -1,7 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Clock, ShieldAlert, Sparkles, AlertCircle, Info } from "lucide-react";
-import { ChemicalData, ChemicalSeverity, RiskEffect } from "@/types/chemical";
+import type { ChemicalData, ChemicalSeverity, RiskEffect } from "@/types/chemical";
 import { Progress } from "@/components/ui/progress";
 
 const getSeverityColor = (severity: ChemicalSeverity) => {
