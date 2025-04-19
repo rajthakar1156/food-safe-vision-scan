@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { productDatabase } from "@/types/chemical";
+import { Trie } from "@/utils/trie";
 
 interface ProductSearchInputProps {
   value: string;
@@ -15,19 +15,35 @@ interface ProductSearchInputProps {
 const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputProps) => {
   const [open, setOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const trieRef = useRef<Trie | null>(null);
+
+  // Initialize trie with product database
+  useEffect(() => {
+    const trie = new Trie();
+    Object.keys(productDatabase).forEach(key => {
+      trie.insert(key);
+      // Also insert the display name if different from key
+      if (productDatabase[key]?.name && productDatabase[key].name !== key) {
+        trie.insert(productDatabase[key].name);
+      }
+    });
+    trieRef.current = trie;
+  }, []);
 
   useEffect(() => {
-    if (!value) {
+    if (!value || !trieRef.current) {
       setSuggestions([]);
       return;
     }
 
-    const normalized = value.toLowerCase().trim();
-    const matches = Object.keys(productDatabase).filter(key => 
-      key.includes(normalized) || normalized.includes(key)
-    );
-
+    // Get suggestions using trie
+    const matches = trieRef.current.findSuggestions(value, 8);
     setSuggestions(matches);
+
+    // Open dropdown if we have suggestions
+    if (matches.length > 0) {
+      setOpen(true);
+    }
   }, [value]);
 
   return (
@@ -57,7 +73,10 @@ const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputPro
                     setOpen(false);
                   }}
                 >
-                  {productDatabase[product]?.name || product}
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <span className="flex-1">
+                    {productDatabase[product]?.name || product}
+                  </span>
                 </div>
               ))}
             </div>
