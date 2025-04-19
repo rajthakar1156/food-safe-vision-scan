@@ -1,5 +1,17 @@
 export type ChemicalSeverity = "low" | "medium" | "high";
 
+export type RiskEffect = {
+  description: string;
+  level: number; // 1-10 scale
+  longTerm?: boolean;
+};
+
+export type ChemicalRisk = {
+  name: string;
+  level: number; // 1-10 scale
+  effects: RiskEffect[];
+};
+
 export type HealthImpact = {
   description: string;
   severity: ChemicalSeverity;
@@ -11,9 +23,11 @@ export type ChemicalData = {
   name: string;
   category: string;
   description: string;
+  riskLevel: number; // 1-10 scale
   healthImpacts: HealthImpact[];
   safetyGuidelines: string[];
   alternatives: string[];
+  risks: ChemicalRisk[];
 };
 
 export type ProductBrand = "Balaji" | "Lay's" | "Parle" | "Britannia";
@@ -24,19 +38,20 @@ export const chemicalData: ChemicalData[] = [
   {
     name: "MSG (Monosodium Glutamate)",
     category: "Flavor Enhancers",
-    description: "A common flavor enhancer that can trigger adverse reactions in sensitive individuals",
+    description: "A common flavor enhancer found in many processed foods",
+    riskLevel: 5,
     healthImpacts: [
       {
-        description: "MSG Complex symptoms",
+        description: "MSG Symptom Complex",
         severity: "medium",
         timeframe: "immediate",
-        symptoms: ["Headaches", "Nausea", "Chest pain", "Weakness", "Sweating"]
+        symptoms: ["Headaches", "Nausea", "Flushing", "Sweating", "Chest pain"]
       },
       {
-        description: "Neurological effects",
+        description: "Long-term Health Concerns",
         severity: "medium",
-        timeframe: "short-term",
-        symptoms: ["Numbness", "Tingling sensations", "Drowsiness"]
+        timeframe: "long-term",
+        symptoms: ["Obesity risk", "Metabolic disorders", "Nervous system effects"]
       }
     ],
     safetyGuidelines: [
@@ -44,76 +59,125 @@ export const chemicalData: ChemicalData[] = [
       "Start with small portions to test sensitivity",
       "Choose MSG-free alternatives when available"
     ],
-    alternatives: ["Natural spices", "Herbs", "Seaweed-based seasonings"]
+    alternatives: ["Natural spices", "Herbs", "Seaweed-based seasonings"],
+    risks: [
+      {
+        name: "Neurological Effects",
+        level: 5,
+        effects: [
+          {
+            description: "Headaches and migraines",
+            level: 6,
+            longTerm: false
+          },
+          {
+            description: "Nervous system sensitivity",
+            level: 5,
+            longTerm: true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Acrylamide",
+    category: "Process Contaminants",
+    description: "A chemical formed when starchy foods are cooked at high temperatures",
+    riskLevel: 7,
+    healthImpacts: [
+      {
+        description: "Nervous System Effects",
+        severity: "high",
+        timeframe: "long-term",
+        symptoms: ["Numbness", "Tingling", "Muscle weakness"]
+      },
+      {
+        description: "Cancer Risk",
+        severity: "high",
+        timeframe: "long-term",
+        symptoms: ["Potential carcinogenic effects"]
+      }
+    ],
+    safetyGuidelines: [
+      "Avoid overcooking starchy foods",
+      "Prefer lower temperature cooking methods",
+      "Store potatoes in a dark, cool place"
+    ],
+    alternatives: ["Baked snacks", "Air-fried alternatives", "Raw vegetables"],
+    risks: [
+      {
+        name: "Cancer Risk",
+        level: 7,
+        effects: [
+          {
+            description: "Potential carcinogenic effects",
+            level: 7,
+            longTerm: true
+          }
+        ]
+      },
+      {
+        name: "Neurological Impact",
+        level: 6,
+        effects: [
+          {
+            description: "Long-term nervous system effects",
+            level: 6,
+            longTerm: true
+          }
+        ]
+      }
+    ]
   },
   {
     name: "TBHQ (Tertiary Butylhydroquinone)",
     category: "Preservatives",
-    description: "A synthetic preservative used to extend shelf life of processed foods",
+    description: "A synthetic preservative used to extend shelf life",
+    riskLevel: 6,
     healthImpacts: [
       {
-        description: "Immediate reactions",
+        description: "Immediate Reactions",
         severity: "medium",
         timeframe: "immediate",
-        symptoms: ["Nausea", "Vomiting", "Ringing in the ears"]
+        symptoms: ["Nausea", "Vomiting", "Ringing in ears"]
       },
       {
-        description: "Long-term exposure risks",
+        description: "Long-term Effects",
         severity: "high",
         timeframe: "long-term",
-        symptoms: ["Liver enlargement", "Neurotoxic effects", "Vision disturbances"]
+        symptoms: ["Liver effects", "Vision problems", "Biochemical changes"]
       }
     ],
     safetyGuidelines: [
-      "Avoid products with TBHQ listed in ingredients",
-      "Limit consumption of processed foods",
-      "Choose fresh or naturally preserved alternatives"
+      "Avoid products with TBHQ listed",
+      "Choose fresh foods when possible",
+      "Read ingredient labels carefully"
     ],
-    alternatives: ["Natural antioxidants", "Vitamin E", "Rosemary extract"]
-  },
-  {
-    name: "Sodium Nitrite",
-    category: "Preservatives",
-    description: "Used in processed meats for preservation and color enhancement",
-    healthImpacts: [
+    alternatives: ["Natural preservatives", "Vitamin E", "Rosemary extract"],
+    risks: [
       {
-        description: "Methemoglobinemia risk",
-        severity: "high",
-        timeframe: "immediate",
-        symptoms: ["Bluish skin color", "Shortness of breath", "Fatigue"]
+        name: "Digestive Issues",
+        level: 6,
+        effects: [
+          {
+            description: "Nausea and vomiting",
+            level: 6,
+            longTerm: false
+          }
+        ]
       },
       {
-        description: "Long-term health risks",
-        severity: "high",
-        timeframe: "long-term",
-        symptoms: ["Increased cancer risk", "Cardiovascular issues"]
+        name: "Organ Effects",
+        level: 6,
+        effects: [
+          {
+            description: "Potential liver impact",
+            level: 6,
+            longTerm: true
+          }
+        ]
       }
-    ],
-    safetyGuidelines: [
-      "Limit processed meat consumption",
-      "Choose nitrite-free products",
-      "Store foods properly to prevent bacterial growth"
-    ],
-    alternatives: ["Celery powder", "Beet juice powder", "Sea salt"]
-  },
-  {
-    name: "Modified Starch",
-    category: "Thickeners",
-    description: "A chemically altered form of starch used to improve texture and stability",
-    healthImpacts: [
-      {
-        description: "Digestive issues",
-        severity: "low",
-        timeframe: "immediate",
-        symptoms: ["Bloating", "Gas", "Mild stomach discomfort"]
-      }
-    ],
-    safetyGuidelines: [
-      "Generally recognized as safe (GRAS)",
-      "Consume in moderation",
-      "Check product labels for specific types"
-    ],
-    alternatives: ["Natural starches", "Guar gum", "Pectin"]
+    ]
   }
 ];
 
