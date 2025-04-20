@@ -1,11 +1,11 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, AlertCircle, Link } from "lucide-react";
+import { FileText, AlertCircle } from "lucide-react";
 
-const newsData = [
+export const newsData = [
   {
     id: 1,
     title: "Major Food Adulteration Ring Busted in Gujarat",
@@ -211,6 +211,7 @@ const newsData = [
 const NewsSection = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [visibleNews, setVisibleNews] = useState<number>(6);
+  const navigate = useNavigate();
 
   const filteredNews = activeFilter === "all" 
     ? newsData 
@@ -218,6 +219,10 @@ const NewsSection = () => {
 
   const loadMore = () => {
     setVisibleNews(prev => Math.min(prev + 6, filteredNews.length));
+  };
+
+  const handleReadMore = (newsId: number) => {
+    navigate(`/news/${newsId}`);
   };
 
   return (
@@ -276,7 +281,11 @@ const NewsSection = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <Badge variant="outline">{news.region}</Badge>
-                    <Button variant="ghost" className="text-primary">
+                    <Button 
+                      variant="ghost" 
+                      className="text-primary"
+                      onClick={() => handleReadMore(news.id)}
+                    >
                       <FileText className="w-4 h-4 mr-2" />
                       Read More
                     </Button>
