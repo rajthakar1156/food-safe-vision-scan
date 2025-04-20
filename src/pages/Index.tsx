@@ -1,13 +1,13 @@
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Scanner from "@/components/Scanner";
 import About from "@/components/About";
 import ChemicalInfo from "@/components/ChemicalInfo";
 import ProductGrid from "@/components/ProductGrid";
 import ManualCheck from "@/components/ManualCheck";
 import Footer from "@/components/Footer";
 import RegionalAnalysis from "@/components/RegionalAnalysis";
+import NewsSection from "@/components/NewsSection";
 
 const Index = () => {
   return (
@@ -25,35 +25,40 @@ const Index = () => {
           <Hero />
         </div>
 
-        {/* Scanner Section with animated blob backgrounds */}
+        {/* Manual Check Section with animated blob backgrounds */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
           <div className="absolute -top-1/3 -right-1/5 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl opacity-30 animate-pulse-slow" />
           <div className="absolute -bottom-1/3 -left-1/5 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl opacity-30 animate-pulse-slow" />
           <ManualCheck />
-          <Scanner />
         </div>
 
-        {/* Regional Analysis Section - New Component */}
+        {/* News Section */}
+        <div className="relative py-16">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-50 pointer-events-none" />
+          <NewsSection />
+        </div>
+
+        {/* Regional Analysis Section */}
         <div className="relative py-12">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
           <RegionalAnalysis />
           <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </div>
 
-        {/* Chemical Info Section with enhanced visual separation */}
+        {/* Chemical Info Section */}
         <div className="relative py-16">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-50 pointer-events-none" />
           <ChemicalInfo />
         </div>
 
-        {/* Product Grid with subtle background pattern */}
+        {/* Product Grid */}
         <div className="relative py-12">
           <div className="absolute inset-0 bg-grid-white/5 mask-gradient pointer-events-none" />
           <ProductGrid />
         </div>
 
-        {/* About Section with glass effect and animated orbs */}
+        {/* About Section */}
         <div className="relative overflow-hidden py-16">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
           <div className="absolute -top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse-slow" />

@@ -36,12 +36,13 @@ const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputPro
       return;
     }
 
-    // Get suggestions using trie
-    const matches = trieRef.current.findSuggestions(value, 8);
-    setSuggestions(matches);
+    // Get suggestions using trie with improved matching
+    const matches = trieRef.current.findSuggestions(value, 12); // Increased number of suggestions
+    const uniqueMatches = Array.from(new Set(matches));
+    setSuggestions(uniqueMatches);
 
     // Open dropdown if we have suggestions
-    if (matches.length > 0) {
+    if (uniqueMatches.length > 0) {
       setOpen(true);
     }
   }, [value]);
@@ -53,7 +54,7 @@ const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputPro
           <div className="relative">
             <Input
               id="product-name"
-              placeholder="e.g., Lay's Magic Masala, Kurkure, Maggi"
+              placeholder="Search Indian products (e.g., Maggi, Parle-G, Haldiram's)"
               value={value}
               onChange={(e) => onChange(e.target.value)}
               className="pl-10 h-12 text-base w-full"
@@ -74,15 +75,22 @@ const ProductSearchInput = ({ value, onChange, onSelect }: ProductSearchInputPro
                   }}
                 >
                   <Search className="h-4 w-4 text-muted-foreground" />
-                  <span className="flex-1">
-                    {productDatabase[product]?.name || product}
-                  </span>
+                  <div className="flex-1">
+                    <div className="font-medium">
+                      {productDatabase[product]?.name || product}
+                    </div>
+                    {productDatabase[product]?.brand && (
+                      <div className="text-sm text-muted-foreground">
+                        {productDatabase[product].brand}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
             <div className="p-4 text-center text-sm text-muted-foreground">
-              No product found.
+              No matching products found. Try a different search term.
             </div>
           )}
         </PopoverContent>

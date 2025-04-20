@@ -38,20 +38,34 @@ export const chemicalData: ChemicalData[] = [
   {
     name: "MSG (Monosodium Glutamate)",
     category: "Flavor Enhancers",
-    description: "A common flavor enhancer found in many processed foods",
+    description: "A common flavor enhancer found in many processed foods, particularly in Indian snacks and ready-to-eat meals",
     riskLevel: 5,
     healthImpacts: [
       {
-        description: "MSG Symptom Complex",
+        description: "MSG Symptom Complex (Chinese Restaurant Syndrome)",
         severity: "medium",
         timeframe: "immediate",
-        symptoms: ["Headaches", "Nausea", "Flushing", "Sweating", "Chest pain"]
+        symptoms: [
+          "Severe headaches",
+          "Heart palpitations",
+          "Chest pain",
+          "Nausea",
+          "Excessive sweating",
+          "Facial pressure",
+          "Numbness/tingling"
+        ]
       },
       {
         description: "Long-term Health Concerns",
         severity: "medium",
         timeframe: "long-term",
-        symptoms: ["Obesity risk", "Metabolic disorders", "Nervous system effects"]
+        symptoms: [
+          "Increased risk of obesity",
+          "Metabolic disorders",
+          "Nervous system effects",
+          "Potential reproductive issues",
+          "Endocrine system disruption"
+        ]
       }
     ],
     safetyGuidelines: [
@@ -259,6 +273,66 @@ export const productDatabase = {
       },
       allergens: ["None"],
       shelfLife: "3 months",
+      storageInstructions: "Store in an airtight container"
+    }
+  },
+  "parle monaco": {
+    name: "Parle Monaco Salted Crackers",
+    brand: "Parle" as ProductBrand,
+    category: "Biscuits" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1590080874088-eec64895b423?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "low" as const,
+    chemicals: ["Raising Agents", "Emulsifiers"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 130,
+        protein: 2,
+        carbs: 20,
+        fat: 5,
+        fiber: 0
+      },
+      allergens: ["Wheat"],
+      shelfLife: "6 months",
+      storageInstructions: "Store in an airtight container"
+    }
+  },
+  "maggi masala": {
+    name: "Maggi Masala Instant Noodles",
+    brand: "Nestle" as ProductBrand,
+    category: "Ready to Cook/Eat" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["MSG", "TBHQ", "Artificial Flavors"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 350,
+        protein: 8,
+        carbs: 62,
+        fat: 12,
+        fiber: 2
+      },
+      allergens: ["Wheat"],
+      shelfLife: "8 months",
+      storageInstructions: "Store in a cool, dry place"
+    }
+  },
+  "haldiram aloo bhujia": {
+    name: "Haldiram's Aloo Bhujia",
+    brand: "Haldiram" as ProductBrand,
+    category: "Namkeen" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1589731119540-8f93f4072723?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["Artificial Colors", "Preservatives"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 130,
+        protein: 3,
+        carbs: 15,
+        fat: 8,
+        fiber: 1
+      },
+      allergens: ["May contain traces of nuts"],
+      shelfLife: "4 months",
       storageInstructions: "Store in an airtight container"
     }
   }
