@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Article, AlertCircle } from "lucide-react";
+import { FileText, AlertCircle } from "lucide-react";
 
 const newsData = [
   {
@@ -95,7 +95,7 @@ const NewsSection = () => {
                 <div className="flex justify-between items-center">
                   <Badge variant="outline">{news.region}</Badge>
                   <Button variant="ghost" className="text-primary">
-                    <Article className="w-4 h-4 mr-2" />
+                    <FileText className="w-4 h-4 mr-2" />
                     Read More
                   </Button>
                 </div>
