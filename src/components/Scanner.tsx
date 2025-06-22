@@ -24,6 +24,11 @@ interface AnalysisResult {
   };
 }
 
+interface PredictionItem {
+  label: string;
+  score: number;
+}
+
 const Scanner = () => {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -44,13 +49,13 @@ const Scanner = () => {
       const imageUrl = URL.createObjectURL(imageFile);
       
       // Classify the image
-      const predictions = await classifier(imageUrl);
+      const predictions = await classifier(imageUrl) as PredictionItem[];
       
       // Clean up the object URL
       URL.revokeObjectURL(imageUrl);
 
       // Process predictions to determine food safety
-      const foodRelatedLabels = predictions.filter((pred: any) => 
+      const foodRelatedLabels = predictions.filter((pred: PredictionItem) => 
         pred.label.toLowerCase().includes('food') ||
         pred.label.toLowerCase().includes('snack') ||
         pred.label.toLowerCase().includes('package') ||
@@ -70,7 +75,7 @@ const Scanner = () => {
       return {
         safe: isSafe,
         confidence: topPrediction.score,
-        detectedItems: predictions.slice(0, 3).map((pred: any) => ({
+        detectedItems: predictions.slice(0, 3).map((pred: PredictionItem) => ({
           label: pred.label,
           score: pred.score
         })),
