@@ -1,42 +1,78 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 210 20% 98%;
+    --foreground: 222.2 47.4% 11.2%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 172 70% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+    
+    --safe: 142.1 70.6% 45.3%;
+    --caution: 38 92% 50%;
+    --danger: 0 84.2% 60.2%;
+    
+    --gradient-start: 262 83% 58%;
+    --gradient-end: 310 85% 60%;
+    --accent-pink: 330 85% 65%;
+    --accent-blue: 220 85% 65%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 172 70% 50%;
-
-    --radius: 0.5rem;
-    
-    --safe: 142.1 70.6% 45.3%;
-    --caution: 38 92% 50%;
-    --danger: 0 84.2% 60.2%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 262 83% 58%;
   }
 }
 
@@ -52,35 +88,43 @@
 
 @layer components {
   .gradient-bg {
-    @apply bg-gradient-to-br from-primary/30 to-primary/10;
+    @apply bg-gradient-to-br from-purple-600/30 via-pink-500/20 to-blue-600/30;
   }
   
   .card-hover {
-    @apply transition-transform duration-300 hover:scale-105;
+    @apply transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25;
   }
   
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md transition-colors;
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl;
   }
   
   .btn-outline {
-    @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 rounded-md transition-colors;
+    @apply border-2 border-purple-600/50 bg-background hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-700 px-6 py-3 rounded-xl transition-all duration-300;
   }
 
   .glass-card {
-    @apply bg-white/5 backdrop-blur-sm border border-white/10 shadow-xl;
+    @apply bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl;
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent;
   }
 
   .bg-grid-white {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.05)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(147 51 234 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
   }
 
   .animate-scan {
     animation: scan 2s linear infinite;
+  }
+
+  .interactive-card {
+    @apply transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30 hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50 dark:hover:from-purple-900/20 dark:hover:to-pink-900/20;
+  }
+
+  .floating-orb {
+    @apply absolute rounded-full bg-gradient-to-r from-purple-400/30 to-pink-400/30 blur-xl animate-pulse;
   }
 }
 
@@ -99,10 +143,10 @@
   
   @keyframes pulse {
     0%, 100% {
-      opacity: 0.2;
+      opacity: 0.3;
     }
     50% {
-      opacity: 0.4;
+      opacity: 0.8;
     }
   }
   
@@ -111,7 +155,7 @@
   }
   
   .glow-text {
-    text-shadow: 0 0 10px var(--tw-shadow-color);
+    text-shadow: 0 0 20px var(--tw-shadow-color);
   }
   
   .glow-primary {
@@ -120,15 +164,41 @@
   
   @keyframes scan {
     0% {
-      transform: translateY(0);
-      opacity: 0.5;
+      transform: translateY(-100%);
+      opacity: 0;
     }
     50% {
       opacity: 1;
     }
     100% {
-      transform: translateY(100%);
-      opacity: 0.5;
+      transform: translateY(200%);
+      opacity: 0;
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+    }
+    to {
+      box-shadow: 0 0 40px rgba(147, 51, 234, 0.8), 0 0 60px rgba(236, 72, 153, 0.3);
     }
   }
 }
