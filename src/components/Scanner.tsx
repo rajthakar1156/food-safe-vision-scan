@@ -51,10 +51,10 @@ const Scanner = () => {
       );
 
       const imageUrl = URL.createObjectURL(imageFile);
-      const predictions = await classifier(imageUrl);
+      const predictions = await classifier(imageUrl) as PredictionItem[];
       URL.revokeObjectURL(imageUrl);
 
-      const foodRelatedLabels = predictions.filter((pred: any) => 
+      const foodRelatedLabels = predictions.filter((pred: PredictionItem) => 
         foodKeywords.some(keyword => 
           pred.label.toLowerCase().includes(keyword)
         )
@@ -71,7 +71,7 @@ const Scanner = () => {
       return {
         safe: isSafe,
         confidence: topPrediction.score,
-        detectedItems: foodRelatedLabels.slice(0, 3).map((pred: any) => ({
+        detectedItems: foodRelatedLabels.slice(0, 3).map((pred: PredictionItem) => ({
           label: pred.label,
           score: pred.score
         })),
