@@ -6,7 +6,6 @@ import ProductGrid from "@/components/ProductGrid";
 import ManualCheck from "@/components/ManualCheck";
 import Footer from "@/components/Footer";
 import RegionalAnalysis from "@/components/RegionalAnalysis";
-import NewsSection from "@/components/NewsSection";
 import Scanner from "@/components/Scanner";
 import StorylineGuide from "@/components/StorylineGuide";
 import { useState } from "react";
@@ -40,11 +39,6 @@ const Index = () => {
         {/* Compact Manual Check */}
         <section className="relative py-12">
           <ManualCheck />
-        </section>
-
-        {/* Compact News Section */}
-        <section className="relative py-12 bg-white/70 backdrop-blur-sm">
-          <NewsSection />
         </section>
 
         {/* Other sections with reduced padding */}

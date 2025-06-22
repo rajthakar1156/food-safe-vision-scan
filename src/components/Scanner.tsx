@@ -31,6 +31,7 @@ interface PredictionItem {
 const Scanner = () => {
   const [scanning, setScanning] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showExample, setShowExample] = useState(true);
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -98,6 +99,46 @@ const Scanner = () => {
     }
   };
 
+  const handleExampleImage = async () => {
+    try {
+      // Use a food product example image
+      const exampleImageUrl = "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80"; // Packaged food example
+      setSelectedImage(exampleImageUrl);
+      setScanning(true);
+      setShowExample(false);
+      
+      // Create a mock file from the example image for analysis
+      const response = await fetch(exampleImageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "example-food.jpg", { type: "image/jpeg" });
+      
+      const analysisResult = await analyzeImageWithML(file);
+      
+      navigate('/analysis', { 
+        state: { 
+          result: analysisResult, 
+          image: exampleImageUrl 
+        } 
+      });
+      
+      toast({
+        title: "Example Analysis Complete!",
+        description: "View the detailed food safety analysis results.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        title: "Example Failed",
+        description: "Could not load example image. Please try uploading your own.",
+        variant: "destructive",
+      });
+      setSelectedImage(null);
+      setShowExample(true);
+    } finally {
+      setScanning(false);
+    }
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -140,6 +181,7 @@ const Scanner = () => {
       URL.revokeObjectURL(selectedImage);
     }
     setSelectedImage(null);
+    setShowExample(true);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -220,6 +262,39 @@ const Scanner = () => {
                             Upload a clear image of packaged food items
                           </p>
                         </div>
+                        
+                        {/* Example Image Section */}
+                        {showExample && (
+                          <div className="mt-6 p-4 bg-white/50 dark:bg-slate-800/50 rounded-xl border border-purple-200/30">
+                            <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                              New to food scanning? Try our example:
+                            </p>
+                            <div className="flex items-center gap-4">
+                              <img 
+                                src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=150&q=80" 
+                                alt="Example packaged food product"
+                                className="w-16 h-16 rounded-lg object-cover border-2 border-purple-200"
+                              />
+                              <div className="flex-1 text-left">
+                                <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                                  Packaged Food Example
+                                </p>
+                                <p className="text-xs text-slate-500">
+                                  See how our AI analyzes ingredients
+                                </p>
+                              </div>
+                              <Button
+                                onClick={handleExampleImage}
+                                size="sm"
+                                variant="outline"
+                                className="border-purple-300 hover:bg-purple-50"
+                              >
+                                <Search className="w-4 h-4 mr-1" />
+                                Try Example
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
