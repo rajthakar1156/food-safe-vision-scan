@@ -1,6 +1,5 @@
-
 import { useState, useRef } from "react";
-import { Camera, Upload, RefreshCcw, AlertTriangle, CheckCircle, Loader2, X, Zap } from "lucide-react";
+import { Camera, Upload, RefreshCcw, AlertTriangle, CheckCircle, Loader2, X, Zap, Shield, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -186,29 +185,28 @@ const Scanner = () => {
   };
 
   return (
-    <section id="scan" className="py-20 px-4 relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
-      
-      <div className="container mx-auto relative">
-        <div className="text-center mb-12">
-          <Badge variant="outline" className="mb-4 bg-primary/10 border-primary/20">
-            <Zap className="w-4 h-4 mr-2 text-primary" />
-            AI-Powered Analysis
-          </Badge>
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+    <section id="scan" className="py-24 px-4 relative">
+      <div className="container mx-auto relative z-10">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-full mb-6">
+            <Zap className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Advanced AI Analysis</span>
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
             Smart Product Scanner
           </h2>
-          <p className="text-muted-foreground mt-2 max-w-2xl mx-auto text-lg">
-            Upload a product image or scan with your camera for instant AI-powered ingredient analysis and safety assessment.
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            Upload a product image or use your camera for instant AI-powered ingredient analysis and comprehensive safety assessment.
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <Card className="glass-card border-primary/20 shadow-2xl">
-            <CardContent className="p-8">
+        <div className="max-w-5xl mx-auto">
+          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-slate-200 dark:border-slate-700 shadow-2xl">
+            <CardContent className="p-0">
               
               {/* Scanner Display Area */}
-              <div className="aspect-video bg-gradient-to-br from-muted/50 to-muted/30 rounded-xl overflow-hidden mb-8 relative border border-primary/10">
+              <div className="aspect-[16/10] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-t-xl overflow-hidden relative border-b border-slate-200 dark:border-slate-600">
                 {!result ? (
                   <>
                     {selectedImage ? (
@@ -221,7 +219,7 @@ const Scanner = () => {
                         <Button
                           variant="secondary"
                           size="sm"
-                          className="absolute top-4 right-4"
+                          className="absolute top-4 right-4 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm"
                           onClick={() => setSelectedImage(null)}
                         >
                           <X className="w-4 h-4" />
@@ -230,22 +228,25 @@ const Scanner = () => {
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
                         {scanning ? (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-black/10 backdrop-blur-sm">
-                            <div className="relative w-full h-32 overflow-hidden mb-6">
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent h-1 animate-scan"></div>
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/10 backdrop-blur-sm">
+                            <div className="relative w-full h-32 overflow-hidden mb-8">
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-transparent h-2 animate-scan"></div>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                              <span className="text-primary font-medium text-lg">Analyzing with AI...</span>
+                            <div className="flex items-center gap-4 mb-4">
+                              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                              <span className="text-primary font-semibold text-xl">AI Analysis in Progress...</span>
                             </div>
-                            <p className="text-muted-foreground mt-2">Processing image for ingredient detection</p>
+                            <p className="text-slate-600 dark:text-slate-300 text-lg">Processing image for comprehensive ingredient detection</p>
                           </div>
                         ) : (
-                          <div className="text-center">
-                            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 mx-auto">
-                              <Camera size={32} className="text-primary" />
+                          <div className="text-center space-y-6">
+                            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 mx-auto">
+                              <Camera size={40} className="text-primary" />
                             </div>
-                            <p className="text-muted-foreground">Ready to scan your product</p>
+                            <div>
+                              <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">Ready to Analyze</h3>
+                              <p className="text-slate-600 dark:text-slate-300">Upload an image or use your camera to get started</p>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -259,54 +260,61 @@ const Scanner = () => {
                     />
                   </>
                 ) : (
-                  <div className="relative w-full h-full p-6">
-                    <div className={`absolute inset-0 rounded-xl ${
+                  <div className="relative w-full h-full p-8">
+                    <div className={`absolute inset-0 rounded-t-xl ${
                       result.safe 
-                        ? "bg-gradient-to-br from-green-500/10 to-green-600/5" 
-                        : "bg-gradient-to-br from-red-500/10 to-red-600/5"
+                        ? "bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20" 
+                        : "bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20"
                     }`} />
                     
                     <div className="relative z-10 h-full flex flex-col">
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
+                      {/* Analysis Header */}
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-6">
+                          <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${
                             result.safe ? "bg-green-500" : "bg-red-500"
-                          }`}>
+                          } shadow-lg`}>
                             {result.safe ? (
-                              <CheckCircle className="h-8 w-8 text-white" />
+                              <CheckCircle className="h-10 w-10 text-white" />
                             ) : (
-                              <AlertTriangle className="h-8 w-8 text-white" />
+                              <AlertTriangle className="h-10 w-10 text-white" />
                             )}
                           </div>
                           <div>
-                            <h3 className="text-2xl font-bold">
-                              {result.safe ? "Product Approved" : "Safety Alert"}
+                            <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+                              {result.safe ? "Product Verified" : "Safety Alert"}
                             </h3>
-                            <p className="text-muted-foreground">
-                              Safety Score: {result.details.safetyScore}/100 • 
-                              Confidence: {Math.round(result.confidence * 100)}%
-                            </p>
+                            <div className="flex items-center gap-4 mt-2">
+                              <span className="text-slate-600 dark:text-slate-300">
+                                Safety Score: <span className="font-semibold">{result.details.safetyScore}/100</span>
+                              </span>
+                              <span className="text-slate-600 dark:text-slate-300">
+                                Confidence: <span className="font-semibold">{Math.round(result.confidence * 100)}%</span>
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <Badge variant={result.safe ? "default" : "destructive"} className="text-sm">
+                        <Badge 
+                          variant={result.safe ? "default" : "destructive"} 
+                          className="text-sm px-4 py-2"
+                        >
                           {result.detectedItems[0]?.label || "Product Detected"}
                         </Badge>
                       </div>
                       
                       {/* Analysis Grid */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full bg-primary" />
-                              Detected Items
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
+                        <div className="space-y-6">
+                          <div className="bg-white/50 dark:bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm">
+                            <h4 className="font-semibold mb-4 flex items-center gap-3 text-lg">
+                              <div className="w-3 h-3 rounded-full bg-primary" />
+                              Detection Results
                             </h4>
-                            <div className="space-y-1">
+                            <div className="space-y-3">
                               {result.detectedItems.map((item, i) => (
-                                <div key={i} className="flex justify-between items-center text-sm">
-                                  <span className="capitalize">{item.label}</span>
-                                  <Badge variant="outline" className="text-xs">
+                                <div key={i} className="flex justify-between items-center">
+                                  <span className="capitalize text-slate-700 dark:text-slate-300">{item.label}</span>
+                                  <Badge variant="outline" className="bg-primary/10 border-primary/20">
                                     {Math.round(item.score * 100)}%
                                   </Badge>
                                 </div>
@@ -314,15 +322,15 @@ const Scanner = () => {
                             </div>
                           </div>
                           
-                          <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full bg-orange-500" />
-                              Preservatives
+                          <div className="bg-white/50 dark:bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm">
+                            <h4 className="font-semibold mb-4 flex items-center gap-3 text-lg">
+                              <div className="w-3 h-3 rounded-full bg-orange-500" />
+                              Preservatives Found
                             </h4>
-                            <ul className="text-sm text-muted-foreground space-y-1">
+                            <ul className="space-y-2">
                               {result.details.preservatives.map((item, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <div className="w-1 h-1 rounded-full bg-muted-foreground" />
+                                <li key={i} className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
                                   {item}
                                 </li>
                               ))}
@@ -330,16 +338,16 @@ const Scanner = () => {
                           </div>
                         </div>
                         
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full bg-blue-500" />
+                        <div className="space-y-6">
+                          <div className="bg-white/50 dark:bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm">
+                            <h4 className="font-semibold mb-4 flex items-center gap-3 text-lg">
+                              <div className="w-3 h-3 rounded-full bg-red-500" />
                               Risk Assessment
                             </h4>
-                            <ul className="text-sm text-muted-foreground space-y-1">
+                            <ul className="space-y-2">
                               {result.details.potentialRisks.map((risk, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <div className={`w-1 h-1 rounded-full ${
+                                <li key={i} className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                                  <div className={`w-1.5 h-1.5 rounded-full ${
                                     risk === "None identified" ? "bg-green-500" : "bg-yellow-500"
                                   }`} />
                                   {risk}
@@ -348,15 +356,15 @@ const Scanner = () => {
                             </ul>
                           </div>
                           
-                          <div>
-                            <h4 className="font-semibold mb-2 flex items-center gap-2">
-                              <div className="w-2 h-2 rounded-full bg-purple-500" />
+                          <div className="bg-white/50 dark:bg-slate-800/50 rounded-xl p-6 backdrop-blur-sm">
+                            <h4 className="font-semibold mb-4 flex items-center gap-3 text-lg">
+                              <div className="w-3 h-3 rounded-full bg-blue-500" />
                               Recommendations
                             </h4>
-                            <ul className="text-sm text-muted-foreground space-y-1">
+                            <ul className="space-y-2">
                               {result.details.recommendations.map((rec, i) => (
-                                <li key={i} className="flex items-center gap-2">
-                                  <div className="w-1 h-1 rounded-full bg-muted-foreground" />
+                                <li key={i} className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                                   {rec}
                                 </li>
                               ))}
@@ -369,76 +377,82 @@ const Scanner = () => {
                 )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Action Section */}
+              <div className="p-8">
                 {!result ? (
-                  <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Button 
-                      className={`w-full h-14 text-lg ${scanning ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80'}`}
+                      className={`w-full h-16 text-lg ${scanning ? 'bg-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80'} shadow-lg hover:shadow-xl transition-all`}
                       onClick={handleScan}
                       disabled={scanning}
                     >
                       {scanning ? (
                         <>
-                          <Loader2 className="mr-3 h-5 w-5 animate-spin" />
+                          <Loader2 className="mr-3 h-6 w-6 animate-spin" />
                           Analyzing...
                         </>
                       ) : (
                         <>
-                          <Camera className="mr-3 h-5 w-5" />
+                          <Camera className="mr-3 h-6 w-6" />
                           Scan with Camera
                         </>
                       )}
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="w-full h-14 text-lg border-primary/20 hover:bg-primary/5" 
+                      className="w-full h-16 text-lg border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-lg hover:shadow-xl transition-all" 
                       disabled={scanning}
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      <Upload className="mr-3 h-5 w-5" />
+                      <Upload className="mr-3 h-6 w-6" />
                       Upload Image
                     </Button>
-                  </>
+                  </div>
                 ) : (
                   <Button 
-                    className="w-full col-span-2 h-14 text-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80" 
+                    className="w-full h-16 text-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-lg hover:shadow-xl transition-all" 
                     onClick={resetScan}
                   >
-                    <RefreshCcw className="mr-3 h-5 w-5" />
-                    Scan Another Product
+                    <RefreshCcw className="mr-3 h-6 w-6" />
+                    Analyze Another Product
                   </Button>
                 )}
-              </div>
 
-              {/* Feature highlights */}
-              {!result && !scanning && (
-                <div className="mt-8 pt-6 border-t border-primary/10">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Zap className="w-5 h-5 text-primary" />
+                {/* Feature highlights */}
+                {!result && !scanning && (
+                  <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="text-center space-y-3">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto">
+                          <Zap className="w-7 h-7 text-primary" />
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100 block">AI-Powered</span>
+                          <span className="text-sm text-slate-500 dark:text-slate-400">Advanced machine learning</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-medium">AI-Powered</span>
-                      <span className="text-xs text-muted-foreground">Machine learning analysis</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <CheckCircle className="w-5 h-5 text-primary" />
+                      <div className="text-center space-y-3">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-400/10 flex items-center justify-center mx-auto">
+                          <Shield className="w-7 h-7 text-green-600" />
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100 block">Instant Results</span>
+                          <span className="text-sm text-slate-500 dark:text-slate-400">Real-time analysis</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-medium">Instant Results</span>
-                      <span className="text-xs text-muted-foreground">Real-time processing</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <AlertTriangle className="w-5 h-5 text-primary" />
+                      <div className="text-center space-y-3">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-400/10 flex items-center justify-center mx-auto">
+                          <TrendingUp className="w-7 h-7 text-blue-600" />
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100 block">Comprehensive</span>
+                          <span className="text-sm text-slate-500 dark:text-slate-400">Detailed safety reports</span>
+                        </div>
                       </div>
-                      <span className="text-sm font-medium">Safety First</span>
-                      <span className="text-xs text-muted-foreground">Comprehensive analysis</span>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>

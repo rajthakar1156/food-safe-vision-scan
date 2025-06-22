@@ -8,64 +8,63 @@ import ManualCheck from "@/components/ManualCheck";
 import Footer from "@/components/Footer";
 import RegionalAnalysis from "@/components/RegionalAnalysis";
 import NewsSection from "@/components/NewsSection";
+import Scanner from "@/components/Scanner";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Background elements */}
-      <div className="fixed inset-0 bg-grid-white/5 pointer-events-none" />
-      <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-background/90 pointer-events-none" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      {/* Subtle background pattern */}
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_1px_1px,rgb(15_23_42_/_0.05)_1px,transparent_0)] [background-size:20px_20px] pointer-events-none" />
       
       <Navbar />
       
-      <main className="flex-grow relative">
-        {/* Hero Section with enhanced gradient overlay */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-primary/10 to-transparent pointer-events-none" />
+      <main className="relative">
+        {/* Hero Section */}
+        <section className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
           <Hero />
-        </div>
+        </section>
 
-        {/* Manual Check Section with animated blob backgrounds */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
-          <div className="absolute -top-1/3 -right-1/5 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl opacity-30 animate-pulse-slow" />
-          <div className="absolute -bottom-1/3 -left-1/5 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl opacity-30 animate-pulse-slow" />
+        {/* Scanner Section */}
+        <section className="relative py-24 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/3 to-transparent" />
+          <Scanner />
+        </section>
+
+        {/* Manual Check Section */}
+        <section className="relative py-20">
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-50/80 to-white/80 dark:from-slate-900/80 dark:to-slate-800/80" />
           <ManualCheck />
-        </div>
+        </section>
 
         {/* News Section */}
-        <div className="relative py-16">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-50 pointer-events-none" />
+        <section className="relative py-20 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
           <NewsSection />
-        </div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
+        </section>
 
         {/* Regional Analysis Section */}
-        <div className="relative py-12">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <section className="relative py-20">
           <RegionalAnalysis />
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        </div>
+        </section>
 
         {/* Chemical Info Section */}
-        <div className="relative py-16">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent opacity-50 pointer-events-none" />
+        <section className="relative py-20 bg-gradient-to-b from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50">
+          <div className="absolute inset-0 backdrop-blur-sm" />
           <ChemicalInfo />
-        </div>
+        </section>
 
         {/* Product Grid */}
-        <div className="relative py-12">
-          <div className="absolute inset-0 bg-grid-white/5 mask-gradient pointer-events-none" />
+        <section className="relative py-20 bg-white/60 dark:bg-slate-800/60">
           <ProductGrid />
-        </div>
+        </section>
 
         {/* About Section */}
-        <div className="relative overflow-hidden py-16">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-          <div className="absolute -top-1/3 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse-slow" />
-          <div className="absolute -bottom-1/3 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse-slow delay-1000" />
+        <section className="relative py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
           <About />
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        </div>
+        </section>
       </main>
 
       <Footer />
