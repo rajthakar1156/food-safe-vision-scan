@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, Check, AlertCircle } from "lucide-react";
+import { Image, Check, AlertCircle, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,24 +28,6 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
-};
-
-// More accurate product images for Indian products
-const PRODUCT_IMAGES = {
-  "lays": "https://images.unsplash.com/photo-1613919113640-25632e2d5bd0?q=80&w=1470&auto=format&fit=crop",
-  "kurkure": "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "thums up": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "frooti": "https://images.unsplash.com/photo-1571913384368-69177288b9c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "haldiram": "https://images.unsplash.com/photo-1589731119540-8f93f4072723?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "parle": "https://images.unsplash.com/photo-1610354559669-d258b5faa76b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "maggi": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=1287&auto=format&fit=crop",
-  "amul": "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=1287&auto=format&fit=crop",
-  "britannia": "https://images.unsplash.com/photo-1615588835104-ad9ea6c2e3f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "mtc": "https://images.unsplash.com/photo-1618507221667-8cacea1544c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "dabur": "https://images.unsplash.com/photo-1591168213836-77e9bd7fe377?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "cadbury": "https://images.unsplash.com/photo-1626697556362-a440cf876b6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "ching's": "https://images.unsplash.com/photo-1617622141573-83519d598838?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
-  "default": "https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1305&auto=format&fit=crop"
 };
 
 const normalizeProductName = (name: string): string => {
@@ -84,6 +66,13 @@ interface ProductResult {
   cautionIngredients: string[];
   harmfulIngredients: string[];
   nutritionalInfo?: any;
+  alternatives?: {
+    name: string;
+    brand: string;
+    image: string;
+    whyBetter: string;
+    riskLevel: "low" | "medium" | "high";
+  }[];
 }
 
 const ManualCheck = () => {
@@ -105,6 +94,63 @@ const ManualCheck = () => {
       
       if (productKey) {
         const matchedProduct = productDatabase[productKey];
+        
+        // Define healthy alternatives based on product category
+        const getAlternatives = (category: string, riskLevel: string) => {
+          const alternatives = {
+            "Chips": [
+              {
+                name: "Baked Beetroot Chips",
+                brand: "24 Mantra Organic",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/528693a.jpg",
+                whyBetter: "No artificial colors, baked not fried, natural ingredients",
+                riskLevel: "low" as const
+              },
+              {
+                name: "Quinoa Puffs",
+                brand: "Soulfull",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/486284a.jpg",
+                whyBetter: "High protein, no MSG, gluten-free",
+                riskLevel: "low" as const
+              }
+            ],
+            "Ready to Cook/Eat": [
+              {
+                name: "Organic Vegetable Pasta",
+                brand: "Organic India",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/497232a.jpg",
+                whyBetter: "No preservatives, organic ingredients, lower sodium",
+                riskLevel: "low" as const
+              },
+              {
+                name: "Millet Noodles",
+                brand: "Slurrp Farm",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/498765a.jpg",
+                whyBetter: "Ancient grains, no artificial flavors, high fiber",
+                riskLevel: "low" as const
+              }
+            ],
+            "Biscuits": [
+              {
+                name: "Oats Digestive Biscuits",
+                brand: "Britannia Nutrichoice",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901063001442_7.jpg",
+                whyBetter: "High fiber, no trans fat, added vitamins",
+                riskLevel: "low" as const
+              },
+              {
+                name: "Multigrain Cookies",
+                brand: "Unibic",
+                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8906010351465_10.jpg",
+                whyBetter: "Multiple grains, no artificial colors, lower sugar",
+                riskLevel: "low" as const
+              }
+            ]
+          };
+          
+          return alternatives[category as keyof typeof alternatives] || alternatives["Chips"];
+        };
+        
         setResult({
           id: Math.random(),
           name: matchedProduct.name,
@@ -119,7 +165,8 @@ const ManualCheck = () => {
           safeIngredients: ["Natural flavors", "Salt", "Potato starch"],
           cautionIngredients: ["Edible oil", "Modified starch"],
           harmfulIngredients: matchedProduct.chemicals || [],
-          nutritionalInfo: matchedProduct.healthInfo?.nutritionalValue
+          nutritionalInfo: matchedProduct.healthInfo?.nutritionalValue,
+          alternatives: getAlternatives(matchedProduct.category, matchedProduct.riskLevel)
         });
         
         toast({
@@ -178,7 +225,7 @@ const ManualCheck = () => {
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold">Indian Product Checker</h2>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-            Enter an Indian product name to check for potential harmful chemicals and nutritional information.
+            Enter an Indian product name to check for potential harmful chemicals and get healthy alternatives.
           </p>
         </div>
 
@@ -274,6 +321,39 @@ const ManualCheck = () => {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Healthy Alternatives Section */}
+                {result.alternatives && result.alternatives.length > 0 && (
+                  <Card className="glass-card overflow-hidden">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-green-500" />
+                        Healthier Alternatives
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-4">
+                        {result.alternatives.map((alt, index) => (
+                          <div key={index} className="flex items-center gap-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                            <img 
+                              src={alt.image} 
+                              alt={alt.name}
+                              className="w-12 h-12 object-cover rounded-lg"
+                            />
+                            <div className="flex-1">
+                              <h4 className="font-medium text-green-800 dark:text-green-200">{alt.name}</h4>
+                              <p className="text-sm text-green-600 dark:text-green-300">{alt.brand}</p>
+                              <p className="text-xs text-green-700 dark:text-green-400 mt-1">{alt.whyBetter}</p>
+                            </div>
+                            <div className="px-2 py-1 bg-green-500 text-white text-xs rounded-full">
+                              {alt.riskLevel} risk
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             )}
           </div>
@@ -404,7 +484,7 @@ const ManualCheck = () => {
                   </div>
                   <h3 className="text-xl font-medium mb-2">No Product Selected</h3>
                   <p className="text-muted-foreground max-w-xs mx-auto">
-                    Enter a popular Indian snack or beverage name and click "Check Product" to see a detailed analysis of ingredients and nutritional information.
+                    Enter a popular Indian snack or beverage name and click "Check Product" to see a detailed analysis and healthy alternatives.
                   </p>
                 </div>
               </div>

@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings, History, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,11 +17,22 @@ interface UserProfile {
   verified: boolean;
 }
 
+interface ScanHistory {
+  id: string;
+  productName: string;
+  brand: string;
+  scanDate: string;
+  riskLevel: "low" | "medium" | "high";
+  image: string;
+}
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [scannedCount, setScannedCount] = useState(0);
+  const [showScanHistory, setShowScanHistory] = useState(false);
+  const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
   const { toast } = useToast();
 
   const handleGoogleLogin = async () => {
@@ -40,6 +50,36 @@ const Navbar = () => {
       
       setUserProfile(mockProfile);
       setScannedCount(12); // Mock previous scan count
+      
+      // Mock scan history
+      const mockHistory: ScanHistory[] = [
+        {
+          id: "1",
+          productName: "Lay's Magic Masala",
+          brand: "Lay's",
+          scanDate: "2024-01-15",
+          riskLevel: "medium",
+          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/483620a.jpg"
+        },
+        {
+          id: "2",
+          productName: "Parle-G Biscuits",
+          brand: "Parle",
+          scanDate: "2024-01-14",
+          riskLevel: "low",
+          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030835784_1.jpg"
+        },
+        {
+          id: "3",
+          productName: "Maggi Masala Noodles",
+          brand: "Nestle",
+          scanDate: "2024-01-13",
+          riskLevel: "high",
+          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030833533_5.jpg"
+        }
+      ];
+      
+      setScanHistory(mockHistory);
       
       toast({
         title: "Welcome back!",
@@ -61,6 +101,8 @@ const Navbar = () => {
     setIsLoggedIn(false);
     setUserProfile(null);
     setScannedCount(0);
+    setScanHistory([]);
+    setShowScanHistory(false);
     
     toast({
       title: "Logged out",
@@ -76,6 +118,59 @@ const Navbar = () => {
       variant: "default",
     });
   };
+
+  const getRiskColor = (riskLevel: string) => {
+    switch (riskLevel) {
+      case "high": return "text-red-500";
+      case "medium": return "text-yellow-500";
+      case "low": return "text-green-500";
+      default: return "text-gray-500";
+    }
+  };
+
+  if (showScanHistory) {
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+          <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <History className="w-6 h-6 text-primary" />
+              <h2 className="text-2xl font-bold">Scan History</h2>
+            </div>
+            <Button
+              variant="ghost"
+              onClick={() => setShowScanHistory(false)}
+              className="p-2"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+          
+          <div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
+            <div className="grid gap-4">
+              {scanHistory.map((scan) => (
+                <div key={scan.id} className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                  <img 
+                    src={scan.image} 
+                    alt={scan.productName}
+                    className="w-16 h-16 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">{scan.productName}</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">{scan.brand}</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500">{scan.scanDate}</p>
+                  </div>
+                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${getRiskColor(scan.riskLevel)}`}>
+                    {scan.riskLevel.charAt(0).toUpperCase() + scan.riskLevel.slice(1)} Risk
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <nav className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 sticky top-0 z-50 shadow-lg">
@@ -161,6 +256,14 @@ const Navbar = () => {
                     </div>
                   </div>
                   
+                  <DropdownMenuItem 
+                    onClick={() => setShowScanHistory(true)}
+                    className="flex items-center gap-3 p-3"
+                  >
+                    <History className="w-4 h-4" />
+                    <span>Scan History</span>
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem className="flex items-center gap-3 p-3">
                     <Settings className="w-4 h-4" />
                     <span>Account Settings</span>
@@ -287,6 +390,18 @@ const Navbar = () => {
                       <div className="text-xs text-primary">{scannedCount} products scanned</div>
                     </div>
                   </div>
+                  
+                  <Button 
+                    onClick={() => {
+                      setShowScanHistory(true);
+                      setIsOpen(false);
+                    }}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <History className="w-4 h-4 mr-2" />
+                    View Scan History
+                  </Button>
                   
                   {!userProfile.verified && (
                     <Button 

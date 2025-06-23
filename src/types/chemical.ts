@@ -200,7 +200,7 @@ export const productDatabase = {
     name: "Britannia Bread Pizza Base",
     brand: "Britannia" as ProductBrand,
     category: "Ready to Cook/Eat" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1470&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901063004139_1.jpg",
     riskLevel: "low" as const,
     chemicals: ["Modified Starch", "Preservatives"],
     healthInfo: {
@@ -220,7 +220,7 @@ export const productDatabase = {
     name: "Parle-G Original Glucose Biscuits",
     brand: "Parle" as ProductBrand,
     category: "Biscuits" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1614114825794-35330d6e7c67?q=80&w=1287&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030835784_1.jpg",
     riskLevel: "low" as const,
     chemicals: ["Artificial Flavors", "Emulsifiers"],
     healthInfo: {
@@ -240,7 +240,7 @@ export const productDatabase = {
     name: "Lay's India's Magic Masala",
     brand: "Lay's" as ProductBrand,
     category: "Chips" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1613919113640-25632e2d5bd0?q=80&w=1470&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/483620a.jpg",
     riskLevel: "medium" as const,
     chemicals: ["MSG", "Artificial Flavors", "TBHQ"],
     healthInfo: {
@@ -260,7 +260,7 @@ export const productDatabase = {
     name: "Balaji Simply Salted Wafers",
     brand: "Balaji" as ProductBrand,
     category: "Chips" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1621447504864-d8686e12698c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/466963a.jpg",
     riskLevel: "medium" as const,
     chemicals: ["TBHQ", "Artificial Flavors"],
     healthInfo: {
@@ -280,7 +280,7 @@ export const productDatabase = {
     name: "Parle Monaco Salted Crackers",
     brand: "Parle" as ProductBrand,
     category: "Biscuits" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1590080874088-eec64895b423?q=80&w=1287&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030779633_4.jpg",
     riskLevel: "low" as const,
     chemicals: ["Raising Agents", "Emulsifiers"],
     healthInfo: {
@@ -300,7 +300,7 @@ export const productDatabase = {
     name: "Maggi Masala Instant Noodles",
     brand: "Nestle" as ProductBrand,
     category: "Ready to Cook/Eat" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?q=80&w=1287&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030833533_5.jpg",
     riskLevel: "medium" as const,
     chemicals: ["MSG", "TBHQ", "Artificial Flavors"],
     healthInfo: {
@@ -320,7 +320,7 @@ export const productDatabase = {
     name: "Haldiram's Aloo Bhujia",
     brand: "Haldiram" as ProductBrand,
     category: "Namkeen" as ProductCategory,
-    image: "https://images.unsplash.com/photo-1589731119540-8f93f4072723?q=80&w=1287&auto=format&fit=crop",
+    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/40001653_9.jpg",
     riskLevel: "medium" as const,
     chemicals: ["Artificial Colors", "Preservatives"],
     healthInfo: {
