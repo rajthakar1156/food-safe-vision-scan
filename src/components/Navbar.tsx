@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings, History, TrendingUp } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings, History, Clock, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
   email: string;
@@ -22,8 +22,12 @@ interface ScanHistory {
   productName: string;
   brand: string;
   scanDate: string;
+  scanTime: string;
   riskLevel: "low" | "medium" | "high";
   image: string;
+  chemicals: string[];
+  nutritionalScore: number;
+  timestamp: Date;
 }
 
 const Navbar = () => {
@@ -37,10 +41,8 @@ const Navbar = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      // Simulate Google OAuth process
       setIsLoggedIn(true);
       
-      // Mock user profile data from Google
       const mockProfile: UserProfile = {
         email: "user@example.com",
         name: "John Doe",
@@ -49,33 +51,69 @@ const Navbar = () => {
       };
       
       setUserProfile(mockProfile);
-      setScannedCount(12); // Mock previous scan count
+      setScannedCount(24);
       
-      // Mock scan history
+      // Enhanced mock scan history with proper timestamps
       const mockHistory: ScanHistory[] = [
         {
           id: "1",
-          productName: "Lay's Magic Masala",
+          productName: "Lay's India's Magic Masala",
           brand: "Lay's",
-          scanDate: "2024-01-15",
+          scanDate: "Today",
+          scanTime: "2:30 PM",
           riskLevel: "medium",
-          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/483620a.jpg"
+          image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80",
+          chemicals: ["MSG", "TBHQ", "Artificial Colors"],
+          nutritionalScore: 65,
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
         },
         {
           id: "2",
-          productName: "Parle-G Biscuits",
+          productName: "Parle-G Original Glucose Biscuits",
           brand: "Parle",
-          scanDate: "2024-01-14",
+          scanDate: "Yesterday",
+          scanTime: "11:45 AM",
           riskLevel: "low",
-          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030835784_1.jpg"
+          image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
+          chemicals: ["Emulsifiers", "Raising Agents"],
+          nutritionalScore: 78,
+          timestamp: new Date(Date.now() - 25 * 60 * 60 * 1000) // Yesterday
         },
         {
           id: "3",
-          productName: "Maggi Masala Noodles",
+          productName: "Maggi Masala Instant Noodles",
           brand: "Nestle",
-          scanDate: "2024-01-13",
+          scanDate: "2 days ago",
+          scanTime: "7:20 PM",
           riskLevel: "high",
-          image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030833533_5.jpg"
+          image: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400&q=80",
+          chemicals: ["MSG", "TBHQ", "Sodium Nitrite", "Artificial Flavors"],
+          nutritionalScore: 45,
+          timestamp: new Date(Date.now() - 50 * 60 * 60 * 1000) // 2 days ago
+        },
+        {
+          id: "4",
+          productName: "Haldiram's Aloo Bhujia",
+          brand: "Haldiram",
+          scanDate: "3 days ago",
+          scanTime: "4:15 PM",
+          riskLevel: "medium",
+          image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&q=80",
+          chemicals: ["Artificial Colors", "Preservatives"],
+          nutritionalScore: 58,
+          timestamp: new Date(Date.now() - 75 * 60 * 60 * 1000) // 3 days ago
+        },
+        {
+          id: "5",
+          productName: "Britannia Bread Pizza Base",
+          brand: "Britannia",
+          scanDate: "1 week ago",
+          scanTime: "1:10 PM",
+          riskLevel: "low",
+          image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80",
+          chemicals: ["Modified Starch", "Preservatives"],
+          nutritionalScore: 82,
+          timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 1 week ago
         }
       ];
       
@@ -121,21 +159,32 @@ const Navbar = () => {
 
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
-      case "high": return "text-red-500";
-      case "medium": return "text-yellow-500";
-      case "low": return "text-green-500";
-      default: return "text-gray-500";
+      case "high": return "bg-red-100 text-red-700 border-red-200";
+      case "medium": return "bg-yellow-100 text-yellow-700 border-yellow-200";
+      case "low": return "bg-green-100 text-green-700 border-green-200";
+      default: return "bg-gray-100 text-gray-700 border-gray-200";
     }
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   if (showScanHistory) {
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
-          <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <History className="w-6 h-6 text-primary" />
-              <h2 className="text-2xl font-bold">Scan History</h2>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold">Scan History</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {scanHistory.length} products analyzed
+                </p>
+              </div>
             </div>
             <Button
               variant="ghost"
@@ -146,22 +195,83 @@ const Navbar = () => {
             </Button>
           </div>
           
-          <div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
-            <div className="grid gap-4">
+          <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <div className="grid gap-4 sm:gap-6">
               {scanHistory.map((scan) => (
-                <div key={scan.id} className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
-                  <img 
-                    src={scan.image} 
-                    alt={scan.productName}
-                    className="w-16 h-16 object-cover rounded-lg"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">{scan.productName}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{scan.brand}</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">{scan.scanDate}</p>
-                  </div>
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium ${getRiskColor(scan.riskLevel)}`}>
-                    {scan.riskLevel.charAt(0).toUpperCase() + scan.riskLevel.slice(1)} Risk
+                <div key={scan.id} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    {/* Product Image */}
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={scan.image} 
+                        alt={scan.productName}
+                        className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg"
+                      />
+                    </div>
+                    
+                    {/* Product Details */}
+                    <div className="flex-1 space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                        <div>
+                          <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">
+                            {scan.productName}
+                          </h3>
+                          <p className="text-slate-600 dark:text-slate-300 font-medium">
+                            {scan.brand}
+                          </p>
+                        </div>
+                        
+                        <div className="flex flex-col sm:items-end gap-2">
+                          <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(scan.riskLevel)}`}>
+                            {scan.riskLevel.charAt(0).toUpperCase() + scan.riskLevel.slice(1)} Risk
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                            <Calendar className="w-4 h-4" />
+                            <span>{scan.scanDate}</span>
+                            <Clock className="w-4 h-4" />
+                            <span>{scan.scanTime}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Nutritional Score */}
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                          Health Score:
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-16 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full transition-all duration-500 ${
+                                scan.nutritionalScore >= 80 ? "bg-green-500" :
+                                scan.nutritionalScore >= 60 ? "bg-yellow-500" : "bg-red-500"
+                              }`}
+                              style={{ width: `${scan.nutritionalScore}%` }}
+                            />
+                          </div>
+                          <span className={`text-sm font-bold ${getScoreColor(scan.nutritionalScore)}`}>
+                            {scan.nutritionalScore}/100
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Chemicals Found */}
+                      <div>
+                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400 block mb-2">
+                          Chemicals Found:
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {scan.chemicals.map((chemical, index) => (
+                            <span 
+                              key={index}
+                              className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs rounded-md text-slate-700 dark:text-slate-300"
+                            >
+                              {chemical}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -182,14 +292,14 @@ const Navbar = () => {
               <Sparkles className="w-7 h-7 text-white" />
             </div>
             <div className="flex items-center">
-              <span className="text-primary font-bold text-2xl">Food</span>
-              <span className="text-slate-900 dark:text-slate-100 font-bold text-2xl">Safe</span>
-              <span className="text-primary font-bold text-2xl ml-1">AI</span>
+              <span className="text-primary font-bold text-xl sm:text-2xl">Food</span>
+              <span className="text-slate-900 dark:text-slate-100 font-bold text-xl sm:text-2xl">Safe</span>
+              <span className="text-primary font-bold text-xl sm:text-2xl ml-1">AI</span>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             <a href="#scan" className="text-slate-700 dark:text-slate-300 hover:text-primary transition-colors font-medium">
               Scanner
             </a>
@@ -228,7 +338,7 @@ const Navbar = () => {
                       alt={userProfile.name}
                       className="w-8 h-8 rounded-full object-cover"
                     />
-                    <div className="hidden sm:flex flex-col items-start">
+                    <div className="hidden xl:flex flex-col items-start">
                       <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{userProfile.name}</span>
                       <span className="text-xs text-slate-500 dark:text-slate-400">{scannedCount} products scanned</span>
                     </div>
@@ -322,7 +432,7 @@ const Navbar = () => {
 
           {/* Mobile Navigation Button */}
           <button 
-            className="md:hidden text-slate-700 dark:text-slate-300 p-2" 
+            className="lg:hidden text-slate-700 dark:text-slate-300 p-2" 
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -331,7 +441,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Menu */}
         {isOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-slate-200/50 dark:border-slate-800/50">
+          <div className="lg:hidden mt-4 py-4 border-t border-slate-200/50 dark:border-slate-800/50">
             <div className="flex flex-col space-y-4">
               <a 
                 href="#scan" 

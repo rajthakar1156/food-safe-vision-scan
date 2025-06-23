@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -8,6 +9,7 @@ import {
 } from "recharts";
 import { ChemicalCircle, ChemicalSlider } from "@/components/ChemicalVisualizers";
 import ChemicalDetails from "@/components/ChemicalDetails";
+import ModernRegionalAnalysis from "@/components/ModernRegionalAnalysis";
 import { chemicalData } from "@/types/chemical";
 
 const commonChemicals = [
@@ -63,14 +65,6 @@ const marketShareData = [
   { name: "Processed Snacks", size: 70, color: "#EF4444" },
 ];
 
-const regionData = [
-  { name: "North", organicConsumption: 40, chemicalExposure: 60 },
-  { name: "South", organicConsumption: 55, chemicalExposure: 45 },
-  { name: "East", organicConsumption: 35, chemicalExposure: 65 },
-  { name: "West", organicConsumption: 50, chemicalExposure: 50 },
-  { name: "Central", organicConsumption: 30, chemicalExposure: 70 },
-];
-
 const TreemapCustomContent = (props: any) => {
   const { root, depth, x, y, width, height, index, payload, colors, rank, name } = props;
   
@@ -93,7 +87,7 @@ const TreemapCustomContent = (props: any) => {
         y={y + height / 2 - 10}
         textAnchor="middle"
         fill="#fff"
-        fontSize={16}
+        fontSize={width > 100 ? 16 : 12}
         fontWeight="bold"
       >
         {name}
@@ -103,7 +97,7 @@ const TreemapCustomContent = (props: any) => {
         y={y + height / 2 + 10}
         textAnchor="middle"
         fill="#fff"
-        fontSize={14}
+        fontSize={width > 100 ? 14 : 10}
       >
         {`${marketShareData[index].size}%`}
       </text>
@@ -116,42 +110,46 @@ const ChemicalInfo = () => {
     <section id="chemicals" className="py-20 px-4 bg-gradient-to-br from-background to-background/50">
       <div className="container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Food Chemical Analysis</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Food Chemical Analysis</h2>
           <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
             Understand chemicals in common Indian packaged foods and their potential health impacts.
           </p>
         </div>
 
-        <Tabs defaultValue="trends" className="max-w-5xl mx-auto">
-          <TabsList className="grid w-full grid-cols-7 mb-8">
-            <TabsTrigger value="trends">Market Trends</TabsTrigger>
-            <TabsTrigger value="regional">Regional Data</TabsTrigger>
-            <TabsTrigger value="common">Common Chemicals</TabsTrigger>
-            <TabsTrigger value="stats">Risk Distribution</TabsTrigger>
-            <TabsTrigger value="comparison">Food Comparison</TabsTrigger>
-            <TabsTrigger value="impact">Chemical Impact</TabsTrigger>
-            <TabsTrigger value="details">Health Details</TabsTrigger>
+        <Tabs defaultValue="regional" className="max-w-7xl mx-auto">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 lg:grid-cols-7 mb-8 h-auto md:h-12">
+            <TabsTrigger value="regional" className="text-xs md:text-sm">Regional Analysis</TabsTrigger>
+            <TabsTrigger value="trends" className="text-xs md:text-sm">Market Trends</TabsTrigger>
+            <TabsTrigger value="common" className="text-xs md:text-sm">Common Chemicals</TabsTrigger>
+            <TabsTrigger value="stats" className="text-xs md:text-sm">Risk Distribution</TabsTrigger>
+            <TabsTrigger value="comparison" className="text-xs md:text-sm">Food Comparison</TabsTrigger>
+            <TabsTrigger value="impact" className="text-xs md:text-sm">Chemical Impact</TabsTrigger>
+            <TabsTrigger value="details" className="text-xs md:text-sm">Health Details</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="regional">
+            <ModernRegionalAnalysis />
+          </TabsContent>
 
           <TabsContent value="trends">
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Processed vs Organic Food Trends in India</CardTitle>
+                <CardTitle className="text-xl md:text-2xl">Processed vs Organic Food Trends in India</CardTitle>
                 <CardDescription>
                   Shift in consumption patterns over recent years
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
+                <div className="h-64 md:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                       data={trendData}
-                      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                      margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                      <XAxis dataKey="year" stroke="#999" />
-                      <YAxis stroke="#999" label={{ value: 'Market Share (%)', angle: -90, position: 'insideLeft', fill: '#999' }} />
-                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
+                      <XAxis dataKey="year" stroke="#999" fontSize={12} />
+                      <YAxis stroke="#999" fontSize={12} label={{ value: 'Market Share (%)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle' } }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555', fontSize: '14px' }} />
                       <Legend />
                       <Area type="monotone" dataKey="organic" name="Organic Foods" stackId="1" stroke="#2DD4BF" fill="#2DD4BF" fillOpacity={0.6} />
                       <Area type="monotone" dataKey="processed" name="Processed Foods" stackId="1" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
@@ -161,7 +159,7 @@ const ChemicalInfo = () => {
 
                 <div className="mt-8">
                   <h3 className="text-lg font-medium mb-4">Market Share Distribution</h3>
-                  <div className="h-64">
+                  <div className="h-48 md:h-64">
                     <ResponsiveContainer width="100%" height="100%">
                       <Treemap
                         data={marketShareData}
@@ -176,45 +174,16 @@ const ChemicalInfo = () => {
               </CardContent>
             </Card>
           </TabsContent>
-
-          <TabsContent value="regional">
-            <Card className="glass-card">
-              <CardHeader>
-                <CardTitle>Regional Food Consumption Patterns</CardTitle>
-                <CardDescription>
-                  Organic food consumption and chemical exposure across Indian regions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart
-                      data={regionData}
-                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                    >
-                      <CartesianGrid stroke="#444" />
-                      <XAxis dataKey="name" stroke="#999" />
-                      <YAxis stroke="#999" label={{ value: 'Percentage (%)', angle: -90, position: 'insideLeft', fill: '#999' }} />
-                      <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
-                      <Legend />
-                      <Bar dataKey="organicConsumption" name="Organic Food Consumption" barSize={20} fill="#2DD4BF" />
-                      <Line type="monotone" dataKey="chemicalExposure" name="Chemical Exposure" stroke="#EF4444" strokeWidth={2} />
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
           
           <TabsContent value="common">
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {commonChemicals.map((chemical, index) => (
                 <Card key={index} className="glass-card card-hover">
                   <CardHeader>
-                    <CardTitle className="flex justify-between">
-                      <span>{chemical.name}</span>
+                    <CardTitle className="flex flex-col md:flex-row md:justify-between gap-2">
+                      <span className="text-lg">{chemical.name}</span>
                       <span 
-                        className={`text-xs px-2 py-1 rounded-full ${
+                        className={`text-xs px-2 py-1 rounded-full w-fit ${
                           chemical.risk === "High" 
                             ? "bg-danger/20 text-danger" 
                             : chemical.risk === "Medium" 
@@ -230,7 +199,7 @@ const ChemicalInfo = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p>{chemical.description}</p>
+                    <p className="text-sm md:text-base">{chemical.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -240,13 +209,13 @@ const ChemicalInfo = () => {
           <TabsContent value="stats">
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Distribution of Chemical Risk Levels</CardTitle>
+                <CardTitle className="text-xl md:text-2xl">Distribution of Chemical Risk Levels</CardTitle>
                 <CardDescription>
                   Breakdown of chemicals by potential health risk
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col md:flex-row gap-8">
-                <div className="h-80 w-full md:w-1/2">
+              <CardContent className="flex flex-col lg:flex-row gap-8">
+                <div className="h-64 md:h-80 w-full lg:w-1/2">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -254,7 +223,7 @@ const ChemicalInfo = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={100}
+                        outerRadius={window.innerWidth < 768 ? 80 : 100}
                         fill="#8884d8"
                         dataKey="value"
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
@@ -268,7 +237,7 @@ const ChemicalInfo = () => {
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="h-80 w-full md:w-1/2">
+                <div className="h-64 md:h-80 w-full lg:w-1/2">
                   <div className="grid grid-cols-1 gap-6 h-full place-content-center">
                     {pieChartData.map((item, index) => (
                       <ChemicalSlider 
@@ -288,28 +257,28 @@ const ChemicalInfo = () => {
           <TabsContent value="comparison">
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Chemical Composition by Food Category</CardTitle>
+                <CardTitle className="text-xl md:text-2xl">Chemical Composition by Food Category</CardTitle>
                 <CardDescription>
                   Comparing harmful vs. safe ingredients across common Indian snacks
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-80">
+                <div className="h-64 md:h-80">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={barChartData}
                       margin={{
                         top: 20,
-                        right: 30,
-                        left: 20,
+                        right: 10,
+                        left: 10,
                         bottom: 5,
                       }}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                      <XAxis dataKey="name" stroke="#999" />
-                      <YAxis label={{ value: 'Percentage (%)', angle: -90, position: 'insideLeft', fill: '#999' }} stroke="#999" />
+                      <XAxis dataKey="name" stroke="#999" fontSize={window.innerWidth < 768 ? 10 : 12} />
+                      <YAxis label={{ value: 'Percentage (%)', angle: -90, position: 'insideLeft' }} stroke="#999" fontSize={12} />
                       <Tooltip 
-                        contentStyle={{ backgroundColor: '#333', borderColor: '#555' }}
+                        contentStyle={{ backgroundColor: '#333', borderColor: '#555', fontSize: '14px' }}
                         labelStyle={{ color: '#eee' }}
                       />
                       <Legend />
@@ -325,20 +294,20 @@ const ChemicalInfo = () => {
           <TabsContent value="impact">
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Chemical Impact & Prevalence</CardTitle>
+                <CardTitle className="text-xl md:text-2xl">Chemical Impact & Prevalence</CardTitle>
                 <CardDescription>
                   Analysis of chemical presence and potential health impact
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-96">
+                <div className="h-64 md:h-96">
                   <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart
                       margin={{
                         top: 20,
-                        right: 20,
+                        right: 10,
                         bottom: 20,
-                        left: 20,
+                        left: 10,
                       }}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -348,7 +317,8 @@ const ChemicalInfo = () => {
                         name="Prevalence" 
                         unit="%" 
                         stroke="#999"
-                        label={{ value: 'Prevalence in Indian Products (%)', position: 'bottom', fill: '#999' }}
+                        fontSize={12}
+                        label={{ value: 'Prevalence in Indian Products (%)', position: 'bottom' }}
                       />
                       <YAxis 
                         type="number" 
@@ -356,17 +326,18 @@ const ChemicalInfo = () => {
                         name="Risk" 
                         unit="%" 
                         stroke="#999"
-                        label={{ value: 'Potential Health Risk', angle: -90, position: 'left', fill: '#999' }}
+                        fontSize={12}
+                        label={{ value: 'Potential Health Risk', angle: -90, position: 'left' }}
                       />
                       <ZAxis 
                         type="number" 
                         dataKey="value" 
-                        range={[50, 400]} 
+                        range={[30, 200]} 
                         name="Quantity" 
                       />
                       <Tooltip 
                         cursor={{ strokeDasharray: '3 3' }}
-                        contentStyle={{ backgroundColor: '#333', borderColor: '#555' }}
+                        contentStyle={{ backgroundColor: '#333', borderColor: '#555', fontSize: '14px' }}
                         formatter={(value, name) => [value, name]}
                       />
                       <Scatter 
