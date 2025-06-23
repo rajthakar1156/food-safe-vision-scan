@@ -83,7 +83,7 @@ const Hero = () => {
               {[
                 { icon: CheckCircle, text: "99.8% Accuracy" },
                 { icon: Sparkles, text: "Real-time Analysis" },
-                { icon: Shield, text: "FDA Compliant" },
+                { icon: ShieldCheck, text: "FDA Compliant" },
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full border border-slate-200/50 dark:border-slate-700/50">
                   <item.icon className="w-4 h-4 text-primary" />
