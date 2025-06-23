@@ -72,6 +72,7 @@ interface ProductResult {
     image: string;
     whyBetter: string;
     riskLevel: "low" | "medium" | "high";
+    price?: string;
   }[];
 }
 
@@ -80,6 +81,93 @@ const ManualCheck = () => {
   const [isChecking, setIsChecking] = useState(false);
   const [result, setResult] = useState<ProductResult | null>(null);
   const { toast } = useToast();
+
+  const getHealthyAlternatives = (category: string, riskLevel: string) => {
+    const alternatives = {
+      "Chips": [
+        {
+          name: "Baked Sweet Potato Chips",
+          brand: "24 Mantra Organic",
+          image: "https://images.unsplash.com/photo-1618020185161-bb76e97ad9b8?w=400&q=80",
+          whyBetter: "No artificial colors, baked not fried, natural sweet potato, high in fiber",
+          riskLevel: "low" as const,
+          price: "₹150/100g"
+        },
+        {
+          name: "Roasted Chickpea Snacks",
+          brand: "Soulfull",
+          image: "https://images.unsplash.com/photo-1599909533730-9d3e58b98a88?w=400&q=80",
+          whyBetter: "High protein, no MSG, gluten-free, roasted not fried",
+          riskLevel: "low" as const,
+          price: "₹120/100g"
+        },
+        {
+          name: "Quinoa Puffs",
+          brand: "True Elements",
+          image: "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=400&q=80",
+          whyBetter: "Superfood quinoa, no preservatives, high protein and fiber",
+          riskLevel: "low" as const,
+          price: "₹180/100g"
+        }
+      ],
+      "Ready to Cook/Eat": [
+        {
+          name: "Organic Whole Wheat Pasta",
+          brand: "Organic India",
+          image: "https://images.unsplash.com/photo-1551462147-37abc8c5d95a?w=400&q=80",
+          whyBetter: "No preservatives, organic whole wheat, lower sodium",
+          riskLevel: "low" as const,
+          price: "₹200/500g"
+        },
+        {
+          name: "Millet Noodles",
+          brand: "Slurrp Farm",
+          image: "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=400&q=80",
+          whyBetter: "Ancient grains, no artificial flavors, high fiber, gluten-free",
+          riskLevel: "low" as const,
+          price: "₹160/200g"
+        }
+      ],
+      "Biscuits": [
+        {
+          name: "Oats Digestive Biscuits",
+          brand: "Britannia Nutrichoice",
+          image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
+          whyBetter: "High fiber, no trans fat, added vitamins and minerals",
+          riskLevel: "low" as const,
+          price: "₹80/150g"
+        },
+        {
+          name: "Multigrain Cookies",
+          brand: "Unibic",
+          image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&q=80",
+          whyBetter: "Multiple grains, no artificial colors, lower sugar content",
+          riskLevel: "low" as const,
+          price: "₹100/150g"
+        }
+      ],
+      "Namkeen": [
+        {
+          name: "Roasted Makhana",
+          brand: "Farmley",
+          image: "https://images.unsplash.com/photo-1569197388831-15c4ea27b7a9?w=400&q=80",
+          whyBetter: "Natural fox nuts, low calorie, high protein, no artificial additives",
+          riskLevel: "low" as const,
+          price: "₹200/100g"
+        },
+        {
+          name: "Baked Moong Dal",
+          brand: "Haldiram's Lite",
+          image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&q=80",
+          whyBetter: "Baked not fried, high protein, natural spices",
+          riskLevel: "low" as const,
+          price: "₹90/150g"
+        }
+      ]
+    };
+    
+    return alternatives[category as keyof typeof alternatives] || alternatives["Chips"];
+  };
 
   const handleCheck = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,62 +183,6 @@ const ManualCheck = () => {
       if (productKey) {
         const matchedProduct = productDatabase[productKey];
         
-        // Define healthy alternatives based on product category
-        const getAlternatives = (category: string, riskLevel: string) => {
-          const alternatives = {
-            "Chips": [
-              {
-                name: "Baked Beetroot Chips",
-                brand: "24 Mantra Organic",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/528693a.jpg",
-                whyBetter: "No artificial colors, baked not fried, natural ingredients",
-                riskLevel: "low" as const
-              },
-              {
-                name: "Quinoa Puffs",
-                brand: "Soulfull",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/486284a.jpg",
-                whyBetter: "High protein, no MSG, gluten-free",
-                riskLevel: "low" as const
-              }
-            ],
-            "Ready to Cook/Eat": [
-              {
-                name: "Organic Vegetable Pasta",
-                brand: "Organic India",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/497232a.jpg",
-                whyBetter: "No preservatives, organic ingredients, lower sodium",
-                riskLevel: "low" as const
-              },
-              {
-                name: "Millet Noodles",
-                brand: "Slurrp Farm",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/498765a.jpg",
-                whyBetter: "Ancient grains, no artificial flavors, high fiber",
-                riskLevel: "low" as const
-              }
-            ],
-            "Biscuits": [
-              {
-                name: "Oats Digestive Biscuits",
-                brand: "Britannia Nutrichoice",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901063001442_7.jpg",
-                whyBetter: "High fiber, no trans fat, added vitamins",
-                riskLevel: "low" as const
-              },
-              {
-                name: "Multigrain Cookies",
-                brand: "Unibic",
-                image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8906010351465_10.jpg",
-                whyBetter: "Multiple grains, no artificial colors, lower sugar",
-                riskLevel: "low" as const
-              }
-            ]
-          };
-          
-          return alternatives[category as keyof typeof alternatives] || alternatives["Chips"];
-        };
-        
         setResult({
           id: Math.random(),
           name: matchedProduct.name,
@@ -160,13 +192,12 @@ const ManualCheck = () => {
           riskLevel: matchedProduct.riskLevel,
           chemicals: matchedProduct.chemicals,
           healthInfo: matchedProduct.healthInfo,
-          // Simulate more data based on chemicals
           overallRisk: matchedProduct.riskLevel,
-          safeIngredients: ["Natural flavors", "Salt", "Potato starch"],
-          cautionIngredients: ["Edible oil", "Modified starch"],
+          safeIngredients: ["Natural flavors", "Salt", "Potato starch", "Vegetable oil"],
+          cautionIngredients: ["Edible oil", "Modified starch", "Spices"],
           harmfulIngredients: matchedProduct.chemicals || [],
           nutritionalInfo: matchedProduct.healthInfo?.nutritionalValue,
-          alternatives: getAlternatives(matchedProduct.category, matchedProduct.riskLevel)
+          alternatives: getHealthyAlternatives(matchedProduct.category, matchedProduct.riskLevel)
         });
         
         toast({
@@ -176,7 +207,7 @@ const ManualCheck = () => {
       } else {
         toast({
           title: "Product not found",
-          description: "Try entering a popular Indian brand like Britannia, Parle-G, Lay's, or Balaji",
+          description: "Try entering a popular Indian brand like Lays, Parle-G, or Maggi",
           variant: "destructive",
         });
         setResult(null);
@@ -231,6 +262,7 @@ const ManualCheck = () => {
 
         <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
           <div className="space-y-6">
+            {/* Search Form */}
             <form onSubmit={handleCheck} className="glass-card p-6 rounded-lg">
               <div className="space-y-4">
                 <div>
@@ -241,13 +273,15 @@ const ManualCheck = () => {
                       onChange={setProductName}
                       onSelect={(value) => {
                         setProductName(value);
-                        const form = document.querySelector('form');
-                        if (form) form.requestSubmit();
+                        setTimeout(() => {
+                          const form = document.querySelector('form');
+                          if (form) form.requestSubmit();
+                        }, 100);
                       }}
                     />
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Try: Lays, Kurkure, Thums Up, Frooti, Haldiram, Parle, Maggi, Amul, Britannia, MTR, Dabur, Cadbury, Ching's
+                    Try: Lays, Parle-G, Maggi, Haldiram, Britannia
                   </p>
                 </div>
                 
@@ -268,8 +302,10 @@ const ManualCheck = () => {
               </div>
             </form>
 
+            {/* Charts Section */}
             {result && (
               <div className="space-y-6">
+                {/* Nutritional Analysis */}
                 <Card className="glass-card overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg">Nutritional Analysis</CardTitle>
@@ -296,6 +332,7 @@ const ManualCheck = () => {
                   </CardContent>
                 </Card>
                 
+                {/* Ingredient Analysis */}
                 <Card className="glass-card overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg">Ingredient Analysis</CardTitle>
@@ -321,161 +358,190 @@ const ManualCheck = () => {
                     </div>
                   </CardContent>
                 </Card>
-
-                {/* Healthy Alternatives Section */}
-                {result.alternatives && result.alternatives.length > 0 && (
-                  <Card className="glass-card overflow-hidden">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-green-500" />
-                        Healthier Alternatives
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-4">
-                        {result.alternatives.map((alt, index) => (
-                          <div key={index} className="flex items-center gap-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                            <img 
-                              src={alt.image} 
-                              alt={alt.name}
-                              className="w-12 h-12 object-cover rounded-lg"
-                            />
-                            <div className="flex-1">
-                              <h4 className="font-medium text-green-800 dark:text-green-200">{alt.name}</h4>
-                              <p className="text-sm text-green-600 dark:text-green-300">{alt.brand}</p>
-                              <p className="text-xs text-green-700 dark:text-green-400 mt-1">{alt.whyBetter}</p>
-                            </div>
-                            <div className="px-2 py-1 bg-green-500 text-white text-xs rounded-full">
-                              {alt.riskLevel} risk
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
               </div>
             )}
           </div>
           
-          <div>
+          {/* Results Section */}
+          <div className="space-y-6">
             {result ? (
-              <Card className="glass-card overflow-hidden h-full">
-                <div className="aspect-video w-full overflow-hidden relative">
-                  <img 
-                    src={result.image} 
-                    alt={result.name}
-                    className="w-full h-64 object-cover"
-                  />
-                  <div 
-                    className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium ${
-                      result.riskLevel === "high" 
-                        ? "bg-red-500/80 text-white" 
+              <>
+                {/* Product Analysis Card */}
+                <Card className="glass-card overflow-hidden">
+                  <div className="aspect-video w-full overflow-hidden relative">
+                    <img 
+                      src={result.image} 
+                      alt={result.name}
+                      className="w-full h-64 object-cover"
+                      onError={(e) => {
+                        console.error('Product image failed to load');
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1573740144720-dd5c9c53c3e3?w=400&q=80";
+                      }}
+                    />
+                    <div 
+                      className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium ${
+                        result.riskLevel === "high" 
+                          ? "bg-red-500/80 text-white" 
+                          : result.riskLevel === "medium" 
+                            ? "bg-yellow-500/80 text-black" 
+                            : "bg-green-500/80 text-black"
+                      }`}
+                    >
+                      {result.riskLevel === "high" 
+                        ? "High Risk" 
                         : result.riskLevel === "medium" 
-                          ? "bg-yellow-500/80 text-black" 
-                          : "bg-green-500/80 text-black"
-                    }`}
-                  >
-                    {result.riskLevel === "high" 
-                      ? "High Risk" 
-                      : result.riskLevel === "medium" 
-                        ? "Medium Risk" 
-                        : "Low Risk"
-                    }
+                          ? "Medium Risk" 
+                          : "Low Risk"
+                      }
+                    </div>
                   </div>
-                </div>
-                
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <span>{result.name}</span>
-                    <span className="text-sm font-normal text-muted-foreground">by {result.brand}</span>
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Chemical Analysis:</h4>
-                      <div className="h-3 w-full rounded-full overflow-hidden bg-white/10 mb-4">
-                        <div 
-                          className={`h-full ${
-                            result.overallRisk === "high" 
-                              ? "bg-red-500 w-4/5" 
-                              : result.overallRisk === "medium" 
-                                ? "bg-yellow-500 w-1/2" 
-                                : "bg-green-500 w-1/5"
-                          }`}
-                        ></div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3">
+                  
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <span>{result.name}</span>
+                      <span className="text-sm font-normal text-muted-foreground">by {result.brand}</span>
+                    </CardTitle>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Chemical Analysis */}
                       <div>
-                        <h4 className="text-sm flex items-center">
-                          <Check className="h-4 w-4 text-green-500 mr-1" />
-                          Safe Ingredients:
-                        </h4>
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          {result.safeIngredients.map((ingredient: string, i: number) => (
-                            <span 
-                              key={i} 
-                              className="px-2 py-1 bg-green-500/10 text-green-500 rounded-full text-xs"
-                            >
-                              {ingredient}
-                            </span>
-                          ))}
+                        <h4 className="font-medium mb-2">Chemical Analysis:</h4>
+                        <div className="h-3 w-full rounded-full overflow-hidden bg-white/10 mb-4">
+                          <div 
+                            className={`h-full ${
+                              result.overallRisk === "high" 
+                                ? "bg-red-500 w-4/5" 
+                                : result.overallRisk === "medium" 
+                                  ? "bg-yellow-500 w-1/2" 
+                                  : "bg-green-500 w-1/5"
+                            }`}
+                          ></div>
                         </div>
                       </div>
                       
-                      <div>
-                        <h4 className="text-sm flex items-center">
-                          <AlertCircle className="h-4 w-4 text-yellow-500 mr-1" />
-                          Use with Caution:
-                        </h4>
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          {result.cautionIngredients.map((ingredient: string, i: number) => (
-                            <span 
-                              key={i} 
-                              className="px-2 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs"
-                            >
-                              {ingredient}
-                            </span>
-                          ))}
+                      <div className="space-y-3">
+                        <div>
+                          <h4 className="text-sm flex items-center">
+                            <Check className="h-4 w-4 text-green-500 mr-1" />
+                            Safe Ingredients:
+                          </h4>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {result.safeIngredients.map((ingredient: string, i: number) => (
+                              <span 
+                                key={i} 
+                                className="px-2 py-1 bg-green-500/10 text-green-500 rounded-full text-xs"
+                              >
+                                {ingredient}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm flex items-center">
+                            <AlertCircle className="h-4 w-4 text-yellow-500 mr-1" />
+                            Use with Caution:
+                          </h4>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {result.cautionIngredients.map((ingredient: string, i: number) => (
+                              <span 
+                                key={i} 
+                                className="px-2 py-1 bg-yellow-500/10 text-yellow-500 rounded-full text-xs"
+                              >
+                                {ingredient}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm flex items-center">
+                            <AlertCircle className="h-4 w-4 text-red-500 mr-1" />
+                            Potentially Harmful:
+                          </h4>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {result.harmfulIngredients.map((ingredient: string, i: number) => (
+                              <span 
+                                key={i} 
+                                className="px-2 py-1 bg-red-500/10 text-red-500 rounded-full text-xs"
+                              >
+                                {ingredient}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                       
-                      <div>
-                        <h4 className="text-sm flex items-center">
-                          <AlertCircle className="h-4 w-4 text-red-500 mr-1" />
-                          Potentially Harmful:
-                        </h4>
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          {result.harmfulIngredients.map((ingredient: string, i: number) => (
-                            <span 
-                              key={i} 
-                              className="px-2 py-1 bg-red-500/10 text-red-500 rounded-full text-xs"
-                            >
-                              {ingredient}
-                            </span>
-                          ))}
-                        </div>
+                      <div className="mt-4 p-3 bg-white/5 rounded-lg text-sm">
+                        <p className="font-medium">Recommendation:</p>
+                        <p className="mt-1">
+                          {result.overallRisk === "high" 
+                            ? "Consider alternatives with fewer artificial additives."
+                            : result.overallRisk === "medium"
+                              ? "Consume in moderation and be aware of artificial additives."
+                              : "Generally safe for consumption based on ingredients analysis."
+                          }
+                        </p>
                       </div>
                     </div>
-                    
-                    <div className="mt-4 p-3 bg-white/5 rounded-lg text-sm">
-                      <p className="font-medium">Recommendation:</p>
-                      <p className="mt-1">
-                        {result.overallRisk === "high" 
-                          ? "Consider alternatives with fewer artificial additives."
-                          : result.overallRisk === "medium"
-                            ? "Consume in moderation and be aware of artificial additives."
-                            : "Generally safe for consumption based on ingredients analysis."
-                        }
+                  </CardContent>
+                </Card>
+
+                {/* Healthy Alternatives Card */}
+                {result.alternatives && result.alternatives.length > 0 && (
+                  <Card className="glass-card overflow-hidden">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="text-xl flex items-center gap-2">
+                        <TrendingUp className="w-6 h-6 text-green-500" />
+                        Healthier Alternatives
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground">
+                        Better options with lower health risks
                       </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {result.alternatives.map((alt, index) => (
+                          <div key={index} className="flex gap-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-800 hover:shadow-md transition-shadow">
+                            <img 
+                              src={alt.image} 
+                              alt={alt.name}
+                              className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                              onError={(e) => {
+                                console.error('Alternative image failed to load');
+                                (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=400&q=80";
+                              }}
+                            />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex-1">
+                                  <h4 className="font-semibold text-green-800 dark:text-green-200 truncate">{alt.name}</h4>
+                                  <p className="text-sm text-green-600 dark:text-green-300">{alt.brand}</p>
+                                  {alt.price && (
+                                    <p className="text-sm font-medium text-green-700 dark:text-green-400">{alt.price}</p>
+                                  )}
+                                </div>
+                                <div className="px-2 py-1 bg-green-500 text-white text-xs rounded-full whitespace-nowrap">
+                                  {alt.riskLevel} risk
+                                </div>
+                              </div>
+                              <p className="text-xs text-green-700 dark:text-green-400 mt-2 leading-relaxed">{alt.whyBetter}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <p className="text-sm text-blue-800 dark:text-blue-200">
+                          💡 <strong>Tip:</strong> These alternatives contain fewer artificial additives and offer better nutritional value.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
             ) : (
               <div className="h-full flex items-center justify-center glass-card rounded-lg p-6">
                 <div className="text-center">

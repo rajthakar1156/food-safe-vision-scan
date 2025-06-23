@@ -1,3 +1,4 @@
+
 export type ChemicalSeverity = "low" | "medium" | "high";
 
 export type RiskEffect = {
@@ -30,7 +31,7 @@ export type ChemicalData = {
   risks: ChemicalRisk[];
 };
 
-export type ProductBrand = "Balaji" | "Lay's" | "Parle" | "Britannia";
+export type ProductBrand = "Balaji" | "Lay's" | "Parle" | "Britannia" | "Nestle" | "Haldiram";
 
 export type ProductCategory = "Chips" | "Namkeen" | "Snacks" | "Biscuits" | "Breads" | "Ready to Cook/Eat" | "Beverages" | "Dairy" | "Confectionery";
 
@@ -200,7 +201,7 @@ export const productDatabase = {
     name: "Britannia Bread Pizza Base",
     brand: "Britannia" as ProductBrand,
     category: "Ready to Cook/Eat" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901063004139_1.jpg",
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80",
     riskLevel: "low" as const,
     chemicals: ["Modified Starch", "Preservatives"],
     healthInfo: {
@@ -220,7 +221,7 @@ export const productDatabase = {
     name: "Parle-G Original Glucose Biscuits",
     brand: "Parle" as ProductBrand,
     category: "Biscuits" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030835784_1.jpg",
+    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
     riskLevel: "low" as const,
     chemicals: ["Artificial Flavors", "Emulsifiers"],
     healthInfo: {
@@ -240,7 +241,7 @@ export const productDatabase = {
     name: "Lay's India's Magic Masala",
     brand: "Lay's" as ProductBrand,
     category: "Chips" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/483620a.jpg",
+    image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80",
     riskLevel: "medium" as const,
     chemicals: ["MSG", "Artificial Flavors", "TBHQ"],
     healthInfo: {
@@ -260,7 +261,7 @@ export const productDatabase = {
     name: "Balaji Simply Salted Wafers",
     brand: "Balaji" as ProductBrand,
     category: "Chips" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/466963a.jpg",
+    image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=400&q=80",
     riskLevel: "medium" as const,
     chemicals: ["TBHQ", "Artificial Flavors"],
     healthInfo: {
@@ -280,7 +281,7 @@ export const productDatabase = {
     name: "Parle Monaco Salted Crackers",
     brand: "Parle" as ProductBrand,
     category: "Biscuits" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030779633_4.jpg",
+    image: "https://images.unsplash.com/photo-1571167963794-825c5d8eef0a?w=400&q=80",
     riskLevel: "low" as const,
     chemicals: ["Raising Agents", "Emulsifiers"],
     healthInfo: {
@@ -300,7 +301,7 @@ export const productDatabase = {
     name: "Maggi Masala Instant Noodles",
     brand: "Nestle" as ProductBrand,
     category: "Ready to Cook/Eat" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/8901030833533_5.jpg",
+    image: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400&q=80",
     riskLevel: "medium" as const,
     chemicals: ["MSG", "TBHQ", "Artificial Flavors"],
     healthInfo: {
@@ -320,7 +321,7 @@ export const productDatabase = {
     name: "Haldiram's Aloo Bhujia",
     brand: "Haldiram" as ProductBrand,
     category: "Namkeen" as ProductCategory,
-    image: "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=270/app/images/products/sliding_image/40001653_9.jpg",
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&q=80",
     riskLevel: "medium" as const,
     chemicals: ["Artificial Colors", "Preservatives"],
     healthInfo: {
