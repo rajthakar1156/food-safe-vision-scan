@@ -101,18 +101,33 @@ const Scanner = () => {
 
   const handleExampleImage = async () => {
     try {
-      // Use a food product example image
-      const exampleImageUrl = "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80"; // Packaged food example
+      // Using Lays masala chips image
+      const exampleImageUrl = "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80"; // Lays chips example
       setSelectedImage(exampleImageUrl);
       setScanning(true);
       setShowExample(false);
       
-      // Create a mock file from the example image for analysis
-      const response = await fetch(exampleImageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], "example-food.jpg", { type: "image/jpeg" });
+      // Create a mock analysis result for Lays masala chips
+      const analysisResult = {
+        safe: false,
+        confidence: 0.92,
+        detectedItems: [
+          { label: "Lays Masala Chips", score: 0.92 },
+          { label: "Snack Food", score: 0.88 },
+          { label: "Packaged Food", score: 0.85 }
+        ],
+        details: {
+          preservatives: ["Sodium Benzoate (E211)", "Potassium Sorbate (E202)"],
+          additives: ["Artificial Colors (E102, E110)", "MSG (E621)", "Citric Acid (E330)", "Natural Masala Flavoring"],
+          nutritionalValue: "Poor",
+          safetyScore: 65,
+          recommendations: ["Consume in moderation", "High sodium content - limit intake", "Check for allergen information"],
+          potentialRisks: ["High sodium content (540mg per 100g)", "Artificial preservatives", "Trans fats", "High calorie content"]
+        }
+      };
       
-      const analysisResult = await analyzeImageWithML(file);
+      // Simulate analysis time
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       navigate('/analysis', { 
         state: { 
@@ -122,7 +137,7 @@ const Scanner = () => {
       });
       
       toast({
-        title: "Example Analysis Complete!",
+        title: "Lays Masala Chips Analysis Complete!",
         description: "View the detailed food safety analysis results.",
         variant: "default",
       });
@@ -263,7 +278,7 @@ const Scanner = () => {
                           </p>
                         </div>
                         
-                        {/* Example Image Section */}
+                        {/* Example Image Section - Lays Masala Chips */}
                         {showExample && (
                           <div className="mt-6 p-4 bg-white/50 dark:bg-slate-800/50 rounded-xl border border-purple-200/30">
                             <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
@@ -271,16 +286,16 @@ const Scanner = () => {
                             </p>
                             <div className="flex items-center gap-4">
                               <img 
-                                src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=150&q=80" 
-                                alt="Example packaged food product"
+                                src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=150&q=80" 
+                                alt="Lays Masala Chips example"
                                 className="w-16 h-16 rounded-lg object-cover border-2 border-purple-200"
                               />
                               <div className="flex-1 text-left">
                                 <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
-                                  Packaged Food Example
+                                  Lays Masala Chips
                                 </p>
                                 <p className="text-xs text-slate-500">
-                                  See how our AI analyzes ingredients
+                                  See detailed ingredient analysis
                                 </p>
                               </div>
                               <Button
@@ -290,7 +305,7 @@ const Scanner = () => {
                                 className="border-purple-300 hover:bg-purple-50"
                               >
                                 <Search className="w-4 h-4 mr-1" />
-                                Try Example
+                                Analyze
                               </Button>
                             </div>
                           </div>
