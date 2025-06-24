@@ -6,7 +6,7 @@ import ChemicalInfo from "@/components/ChemicalInfo";
 import ProductGrid from "@/components/ProductGrid";
 import ManualCheck from "@/components/ManualCheck";
 import Footer from "@/components/Footer";
-import RegionalAnalysis from "@/components/RegionalAnalysis";
+import CompactRegionalAnalysis from "@/components/CompactRegionalAnalysis";
 import Scanner from "@/components/Scanner";
 import StorylineGuide from "@/components/StorylineGuide";
 import { useState } from "react";
@@ -49,9 +49,9 @@ const Index = () => {
           <ManualCheck />
         </section>
 
-        {/* Modern Regional Analysis */}
+        {/* Compact Regional Analysis */}
         <section className="relative py-16 bg-white/40 backdrop-blur-sm">
-          <RegionalAnalysis />
+          <CompactRegionalAnalysis />
         </section>
 
         {/* Enhanced Chemical Info */}
