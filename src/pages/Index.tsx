@@ -27,8 +27,8 @@ const Index = () => {
       <Navbar />
       
       <main className="relative">
-        {/* Modern Hero Section */}
-        <section className="relative py-20 overflow-hidden">
+        {/* Modern Hero Section - removed py-20 to eliminate gap */}
+        <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-blue-600/10 animate-gradient" />
           <Hero />
         </section>
