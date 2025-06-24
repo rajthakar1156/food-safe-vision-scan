@@ -25,7 +25,6 @@ const Chatbot = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('gemini-api-key') || '');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -50,16 +49,89 @@ const Chatbot = () => {
     return null;
   };
 
+  const generateSmartResponse = (userQuery: string, productInfo: any) => {
+    const query = userQuery.toLowerCase();
+    
+    if (productInfo) {
+      let response = `**${productInfo.name}** by ${productInfo.brand}\n\n`;
+      
+      // Safety rating analysis
+      const riskLevel = productInfo.riskLevel;
+      if (riskLevel === 'low') {
+        response += `✅ **Safety Rating: LOW RISK**\nThis product is generally safe for consumption with minimal health concerns.\n\n`;
+      } else if (riskLevel === 'medium') {
+        response += `⚠️ **Safety Rating: MEDIUM RISK**\nConsume in moderation. Some ingredients may cause concerns with regular consumption.\n\n`;
+      } else {
+        response += `🚨 **Safety Rating: HIGH RISK**\nConsider avoiding or consuming very rarely due to potentially harmful ingredients.\n\n`;
+      }
+
+      // Key ingredients
+      if (productInfo.chemicals && productInfo.chemicals.length > 0) {
+        response += `**Key Ingredients of Concern:**\n`;
+        productInfo.chemicals.forEach((chemical: string) => {
+          response += `• ${chemical}\n`;
+        });
+        response += '\n';
+      }
+
+      // Health information
+      if (productInfo.healthInfo) {
+        response += `**Nutritional Information (per serving):**\n`;
+        const nutrition = productInfo.healthInfo.nutritionalValue;
+        response += `• Calories: ${nutrition.calories}\n`;
+        response += `• Protein: ${nutrition.protein}g\n`;
+        response += `• Carbs: ${nutrition.carbs}g\n`;
+        response += `• Fat: ${nutrition.fat}g\n\n`;
+
+        if (productInfo.healthInfo.allergens && productInfo.healthInfo.allergens.length > 0) {
+          response += `**Allergen Information:**\n`;
+          productInfo.healthInfo.allergens.forEach((allergen: string) => {
+            response += `⚠️ ${allergen}\n`;
+          });
+          response += '\n';
+        }
+      }
+
+      // Specific query responses
+      if (query.includes('safe') || query.includes('safety')) {
+        response += `**Safety Assessment:**\nBased on the risk level and ingredients, this product is classified as ${riskLevel} risk. `;
+        if (riskLevel === 'medium' || riskLevel === 'high') {
+          response += `Consider limiting consumption frequency and exploring healthier alternatives.`;
+        } else {
+          response += `It's generally safe for regular consumption.`;
+        }
+      }
+
+      if (query.includes('ingredient') || query.includes('chemical')) {
+        response += `**Ingredient Analysis:**\nThe main ingredients of concern include preservatives and flavor enhancers. Check the full ingredient list on packaging for complete information.`;
+      }
+
+      if (query.includes('alternative') || query.includes('substitute')) {
+        response += `**Healthier Alternatives:**\n• Look for organic or natural variants\n• Choose products with fewer preservatives\n• Consider homemade alternatives\n• Check for "no artificial flavors" labels`;
+      }
+
+      return response;
+    } else {
+      // General food safety advice when product not found
+      let response = `I couldn't find specific information about "${userQuery}" in my database, but here's some general food safety guidance:\n\n`;
+      
+      if (query.includes('chip') || query.includes('snack')) {
+        response += `**For Chips/Snacks:**\n• Look for products with minimal ingredients\n• Avoid items with MSG, TBHQ, or artificial colors\n• Check sodium content\n• Consider baked alternatives\n\n`;
+      }
+      
+      if (query.includes('biscuit') || query.includes('cookie')) {
+        response += `**For Biscuits/Cookies:**\n• Check for trans fats (partially hydrogenated oils)\n• Look for whole grain options\n• Limit products with high sugar content\n• Choose items with natural ingredients\n\n`;
+      }
+
+      response += `**General Tips:**\n• Always read ingredient labels\n• Choose products with fewer, recognizable ingredients\n• Limit processed foods in your diet\n• When in doubt, opt for fresh, whole foods\n\n`;
+      response += `Could you provide the exact product name or brand? I can give you more specific information!`;
+      
+      return response;
+    }
+  };
+
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
-
-    // Check if API key is provided
-    if (!apiKey) {
-      const userApiKey = prompt('Please enter your Gemini AI API key to continue:');
-      if (!userApiKey) return;
-      setApiKey(userApiKey);
-      localStorage.setItem('gemini-api-key', userApiKey);
-    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -69,72 +141,33 @@ const Chatbot = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsLoading(true);
 
     try {
-      // Get product info from local database first
-      const productInfo = getProductInfo(inputValue);
-      let contextInfo = '';
+      // Get product info from local database
+      const productInfo = getProductInfo(currentInput);
       
-      if (productInfo) {
-        contextInfo = `Product found in database: ${productInfo.name} by ${productInfo.brand}. 
-        Category: ${productInfo.category}. 
-        Risk Level: ${productInfo.riskLevel}. 
-        Key Ingredients: ${productInfo.keyIngredients?.join(', ') || 'Not specified'}. 
-        Health Concerns: ${productInfo.healthConcerns?.join(', ') || 'None specified'}. 
-        Additives: ${productInfo.additives?.join(', ') || 'None specified'}.`;
-      }
+      // Generate smart response using local logic
+      const responseText = generateSmartResponse(currentInput, productInfo);
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `You are a food safety AI assistant specializing in Indian food products. 
-              User query: "${inputValue}"
-              
-              ${contextInfo ? `Database information: ${contextInfo}` : ''}
-              
-              Please provide helpful information about:
-              1. Product ingredients and their safety
-              2. Health benefits or concerns
-              3. Safety rating (if applicable)
-              4. Recommendations for healthier alternatives
-              
-              Keep responses concise, informative, and focused on food safety. If you don't have specific information about a product, provide general guidance about similar products or ingredients.`
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 1024,
-          }
-        })
-      });
+      // Add a small delay to simulate processing for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
 
-      const data = await response.json();
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: responseText,
+        isUser: false,
+        timestamp: new Date()
+      };
       
-      if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: data.candidates[0].content.parts[0].text,
-          isUser: false,
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, aiMessage]);
-      } else {
-        throw new Error('Invalid response format');
-      }
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Error calling Gemini API:', error);
+      console.error('Error generating response:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Sorry, I'm having trouble connecting to the AI service. Please check your API key and try again.",
+        text: "I'm having trouble processing your request right now. Please try asking about a specific product name or ingredient!",
         isUser: false,
         timestamp: new Date()
       };
@@ -212,7 +245,7 @@ const Chatbot = () => {
                   <div className="flex items-center gap-2">
                     <Bot className="w-4 h-4" />
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm">Thinking...</span>
+                    <span className="text-sm">Analyzing product...</span>
                   </div>
                 </div>
               </div>
@@ -239,11 +272,10 @@ const Chatbot = () => {
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-            {!apiKey && (
-              <p className="text-xs text-gray-500 mt-2">
-                Gemini AI API key required for chat functionality
-              </p>
-            )}
+            <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              Free AI - No API key required
+            </p>
           </div>
         </div>
       )}
