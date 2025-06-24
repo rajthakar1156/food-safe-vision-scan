@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import RegionalAnalysis from "@/components/RegionalAnalysis";
 import Scanner from "@/components/Scanner";
 import StorylineGuide from "@/components/StorylineGuide";
+import Chatbot from "@/components/Chatbot";
 import { useState } from "react";
 
 const Index = () => {
@@ -71,6 +72,9 @@ const Index = () => {
       </main>
 
       <Footer />
+      
+      {/* AI Chatbot */}
+      <Chatbot />
     </div>
   );
 };
