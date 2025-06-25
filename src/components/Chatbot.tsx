@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, Bot, User, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -38,30 +37,118 @@ const Chatbot = () => {
   const getProductInfo = (productName: string) => {
     const lowerName = productName.toLowerCase().trim();
     
-    // Direct name matching
+    console.log('Searching for product:', lowerName);
+    console.log('Available products:', Object.keys(productDatabase));
+    
+    // Enhanced direct matching with exact product names
+    const exactMatches = {
+      'maggi': 'maggi masala',
+      'maggi masala': 'maggi masala', 
+      'maggi noodles': 'maggi masala',
+      'maggi instant noodles': 'maggi masala',
+      'parle g': 'parle g',
+      'parle-g': 'parle g',
+      'lays': 'lays magic masala',
+      'lays masala': 'lays magic masala',
+      'lays magic masala': 'lays magic masala',
+      'balaji': 'balaji wafers',
+      'balaji wafers': 'balaji wafers',
+      'haldiram': 'haldiram aloo bhujia',
+      'haldiram aloo bhujia': 'haldiram aloo bhujia',
+      'haldirams': 'haldiram aloo bhujia',
+      'britannia bourbon': 'britannia bourbon',
+      'bourbon': 'britannia bourbon',
+      'kurkure': 'kurkure masala munch',
+      'kurkure masala': 'kurkure masala munch',
+      'marie gold': 'britannia marie gold',
+      'britannia marie': 'britannia marie gold',
+      'cadbury': 'cadbury dairy milk',
+      'dairy milk': 'cadbury dairy milk',
+      'ching': 'chings hakka noodles',
+      'chings': 'chings hakka noodles',
+      'chings noodles': 'chings hakka noodles',
+      'hakka noodles': 'chings hakka noodles',
+      'amul': 'amul kool milk',
+      'amul kool': 'amul kool milk',
+      'thums up': 'thums up',
+      'thumsup': 'thums up',
+      'frooti': 'mango frooti',
+      'mango frooti': 'mango frooti',
+      'monaco': 'parle monaco',
+      'parle monaco': 'parle monaco'
+    };
+
+    // Check exact matches first
+    if (exactMatches[lowerName]) {
+      const productKey = exactMatches[lowerName];
+      console.log('Found exact match:', productKey);
+      return productDatabase[productKey];
+    }
+
+    // Direct key matching
     const directMatch = Object.keys(productDatabase).find(key => 
-      key.toLowerCase() === lowerName ||
-      productDatabase[key].name.toLowerCase() === lowerName
+      key.toLowerCase() === lowerName
     );
     
-    if (directMatch) return productDatabase[directMatch];
-    
-    // Partial matching for common product queries
-    const partialMatch = Object.keys(productDatabase).find(key => {
+    if (directMatch) {
+      console.log('Found direct key match:', directMatch);
+      return productDatabase[directMatch];
+    }
+
+    // Brand + product matching with higher accuracy
+    const brandProductMatches = Object.keys(productDatabase).find(key => {
       const product = productDatabase[key];
-      const keyWords = key.toLowerCase().split(' ');
-      const nameWords = product.name.toLowerCase().split(' ');
+      const searchTerms = lowerName.split(' ');
+      const productNameWords = product.name.toLowerCase().split(' ');
       const brandWords = product.brand.toLowerCase().split(' ');
-      const searchWords = lowerName.split(' ');
+      const keyWords = key.toLowerCase().split(' ');
       
-      return searchWords.some(searchWord => 
-        keyWords.some(word => word.includes(searchWord) || searchWord.includes(word)) ||
-        nameWords.some(word => word.includes(searchWord) || searchWord.includes(word)) ||
-        brandWords.some(word => word.includes(searchWord) || searchWord.includes(word))
+      // Check if search contains both brand and product identifiers
+      const hasBrand = brandWords.some(brand => 
+        searchTerms.some(term => term.includes(brand) || brand.includes(term))
       );
+      const hasProduct = productNameWords.some(word => 
+        searchTerms.some(term => term.includes(word) || word.includes(term))
+      ) || keyWords.some(word => 
+        searchTerms.some(term => term.includes(word) || word.includes(term))
+      );
+      
+      return hasBrand && hasProduct;
     });
     
-    return partialMatch ? productDatabase[partialMatch] : null;
+    if (brandProductMatches) {
+      console.log('Found brand+product match:', brandProductMatches);
+      return productDatabase[brandProductMatches];
+    }
+
+    // Fallback partial matching with stricter criteria
+    const partialMatch = Object.keys(productDatabase).find(key => {
+      const product = productDatabase[key];
+      const searchWords = lowerName.split(' ');
+      
+      // Must match at least 2 words or one exact brand/product name
+      let matchCount = 0;
+      const keyWords = key.toLowerCase().split(' ');
+      const nameWords = product.name.toLowerCase().split(' ');
+      
+      searchWords.forEach(searchWord => {
+        if (keyWords.some(word => word === searchWord) || 
+            nameWords.some(word => word === searchWord) ||
+            product.brand.toLowerCase() === searchWord) {
+          matchCount++;
+        }
+      });
+      
+      return matchCount >= Math.min(2, searchWords.length);
+    });
+    
+    if (partialMatch) {
+      console.log('Found partial match:', partialMatch);
+      return productDatabase[partialMatch];
+    }
+    
+    console.log('No match found for:', lowerName);
+    return null;
   };
 
   const generateSmartResponse = (userQuery: string, productInfo: any) => {

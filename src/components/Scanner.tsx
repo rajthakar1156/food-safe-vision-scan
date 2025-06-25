@@ -1,10 +1,12 @@
+
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Upload, RefreshCcw, AlertTriangle, CheckCircle, Loader2, X, Zap, Shield, TrendingUp, Sparkles, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { pipeline } from '@huggingface/transformers';
+import { compareImageWithProducts, compareDominantColors } from "./ImageComparison";
+import { productDatabase } from "@/types/chemical";
 
 interface AnalysisResult {
   safe: boolean;
@@ -23,11 +25,6 @@ interface AnalysisResult {
   };
 }
 
-interface PredictionItem {
-  label: string;
-  score: number;
-}
-
 const Scanner = () => {
   const [scanning, setScanning] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -36,97 +33,48 @@ const Scanner = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
-  const foodKeywords = [
-    'food', 'snack', 'package', 'bottle', 'can', 'box', 'wrapper', 
-    'container', 'packaging', 'drink', 'beverage', 'cereal', 'chips',
-    'cookie', 'bread', 'milk', 'juice', 'soda', 'candy', 'chocolate',
-    'frozen', 'canned', 'packaged', 'processed', 'instant', 'ready'
-  ];
-
-  const analyzeImageWithML = async (imageFile: File) => {
-    try {
-      const classifier = await pipeline(
-        'image-classification',
-        'google/vit-base-patch16-224',
-        { device: 'webgpu' }
-      );
-
-      const imageUrl = URL.createObjectURL(imageFile);
-      const predictions = await classifier(imageUrl) as PredictionItem[];
-      URL.revokeObjectURL(imageUrl);
-
-      const foodRelatedLabels = predictions.filter((pred: PredictionItem) => 
-        foodKeywords.some(keyword => 
-          pred.label.toLowerCase().includes(keyword)
-        )
-      );
-
-      if (foodRelatedLabels.length === 0) {
-        throw new Error('No food products detected. Please upload an image of a packaged food item.');
+  const createAnalysisFromProduct = (productKey: string): AnalysisResult => {
+    const product = productDatabase[productKey];
+    const safetyScore = product.riskLevel === 'low' ? 85 : product.riskLevel === 'medium' ? 65 : 45;
+    
+    return {
+      safe: product.riskLevel === 'low',
+      confidence: 0.92,
+      detectedItems: [
+        { label: product.name, score: 0.92 },
+        { label: product.category, score: 0.88 },
+        { label: "Packaged Food", score: 0.85 }
+      ],
+      details: {
+        preservatives: product.chemicals.filter(c => 
+          c.includes('TBHQ') || c.includes('Benzoate') || c.includes('Sorbate')
+        ),
+        additives: product.chemicals,
+        nutritionalValue: product.riskLevel === 'low' ? "Good" : product.riskLevel === 'medium' ? "Fair" : "Poor",
+        safetyScore,
+        recommendations: [
+          product.riskLevel === 'high' ? "Consider alternatives" : "Consume in moderation",
+          "Check expiry date",
+          "Store as per instructions"
+        ],
+        potentialRisks: product.riskLevel === 'high' 
+          ? ["High sodium content", "Artificial preservatives", "Potential allergens"]
+          : product.riskLevel === 'medium'
+          ? ["Moderate sodium content", "Some artificial additives"]
+          : ["None identified"]
       }
-
-      const topPrediction = foodRelatedLabels[0] || predictions[0];
-      const safetyScore = Math.floor(Math.random() * 40) + 60;
-      const isSafe = safetyScore > 75;
-
-      return {
-        safe: isSafe,
-        confidence: topPrediction.score,
-        detectedItems: foodRelatedLabels.slice(0, 3).map((pred: PredictionItem) => ({
-          label: pred.label,
-          score: pred.score
-        })),
-        details: {
-          preservatives: isSafe 
-            ? ["Sodium Benzoate (E211)", "Potassium Sorbate (E202)"]
-            : ["Sodium Benzoate (E211)", "BHA (E320)", "Sodium Nitrite (E250)"],
-          additives: isSafe
-            ? ["Natural Flavoring", "Ascorbic Acid (Vitamin C)"]
-            : ["Artificial Colors (E102, E110)", "MSG (E621)", "High Fructose Corn Syrup"],
-          nutritionalValue: isSafe ? "Good" : "Poor",
-          safetyScore: safetyScore,
-          recommendations: isSafe
-            ? ["Product meets safety standards", "Consume in moderation", "Check expiry date"]
-            : ["Consider alternatives", "Limit consumption", "Check for allergen information"],
-          potentialRisks: isSafe
-            ? ["None identified"]
-            : ["High sodium content", "Artificial preservatives", "Potential allergens"]
-        }
-      };
-    } catch (error) {
-      console.error('ML Analysis failed:', error);
-      throw new Error(error instanceof Error ? error.message : 'Food product analysis failed. Please try again with a clear image of packaged food.');
-    }
+    };
   };
 
   const handleExampleImage = async () => {
     try {
-      // Using Lays masala chips image
-      const exampleImageUrl = "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80"; // Lays chips example
+      const exampleImageUrl = "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80";
       setSelectedImage(exampleImageUrl);
       setScanning(true);
       setShowExample(false);
       
-      // Create a mock analysis result for Lays masala chips
-      const analysisResult = {
-        safe: false,
-        confidence: 0.92,
-        detectedItems: [
-          { label: "Lays Masala Chips", score: 0.92 },
-          { label: "Snack Food", score: 0.88 },
-          { label: "Packaged Food", score: 0.85 }
-        ],
-        details: {
-          preservatives: ["Sodium Benzoate (E211)", "Potassium Sorbate (E202)"],
-          additives: ["Artificial Colors (E102, E110)", "MSG (E621)", "Citric Acid (E330)", "Natural Masala Flavoring"],
-          nutritionalValue: "Poor",
-          safetyScore: 65,
-          recommendations: ["Consume in moderation", "High sodium content - limit intake", "Check for allergen information"],
-          potentialRisks: ["High sodium content (540mg per 100g)", "Artificial preservatives", "Trans fats", "High calorie content"]
-        }
-      };
+      const analysisResult = createAnalysisFromProduct('lays magic masala');
       
-      // Simulate analysis time
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       navigate('/analysis', { 
@@ -163,27 +111,56 @@ const Scanner = () => {
     setScanning(true);
     
     try {
-      const analysisResult = await analyzeImageWithML(file);
+      // First try advanced image comparison
+      console.log('Starting image comparison...');
+      let comparisonResult = await compareImageWithProducts(file);
       
-      // Navigate to analysis page with results
-      navigate('/analysis', { 
-        state: { 
-          result: analysisResult, 
-          image: imageUrl 
-        } 
-      });
+      // If no match, try dominant color comparison as fallback
+      if (!comparisonResult.match) {
+        console.log('Advanced comparison failed, trying color comparison...');
+        comparisonResult = await compareDominantColors(file);
+      }
       
-      toast({
-        title: "Analysis Complete!",
-        description: "Redirecting to detailed results...",
-        variant: "default",
-      });
+      console.log('Comparison result:', comparisonResult);
+      
+      if (comparisonResult.match && comparisonResult.productKey) {
+        // Product matched - create analysis
+        const analysisResult = createAnalysisFromProduct(comparisonResult.productKey);
+        const matchedProduct = productDatabase[comparisonResult.productKey];
+        
+        navigate('/analysis', { 
+          state: { 
+            result: analysisResult, 
+            image: imageUrl 
+          } 
+        });
+        
+        toast({
+          title: `${matchedProduct.name} Detected!`,
+          description: `Analysis complete with ${Math.round(comparisonResult.confidence * 100)}% confidence.`,
+          variant: "default",
+        });
+      } else {
+        // No product match found - show error
+        throw new Error('PRODUCT_NOT_FOUND');
+      }
     } catch (error) {
-      toast({
-        title: "Analysis Failed",
-        description: error instanceof Error ? error.message : "Could not analyze the image. Please try with a food product image.",
-        variant: "destructive",
-      });
+      console.error('Image analysis error:', error);
+      
+      if (error instanceof Error && error.message === 'PRODUCT_NOT_FOUND') {
+        toast({
+          title: "Product Not Available",
+          description: "The uploaded image doesn't match any products in our database. Please upload an image of a product available on our website.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Analysis Failed",
+          description: "Could not analyze the uploaded image. Please ensure you're uploading a clear image of a food product available on our website.",
+          variant: "destructive",
+        });
+      }
+      
       setSelectedImage(null);
       URL.revokeObjectURL(imageUrl);
     } finally {
@@ -217,7 +194,7 @@ const Scanner = () => {
             Smart Food Scanner
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            Upload food packaging images for instant AI analysis of ingredients and safety assessment.
+            Upload food packaging images for instant AI analysis. Only products available on our website will be analyzed.
           </p>
         </div>
 
@@ -261,7 +238,7 @@ const Scanner = () => {
                         </div>
                         <div className="flex items-center gap-4">
                           <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
-                          <span className="text-purple-700 font-bold text-xl">Analyzing Food Product...</span>
+                          <span className="text-purple-700 font-bold text-xl">Comparing with Website Products...</span>
                         </div>
                       </div>
                     ) : (
@@ -274,11 +251,11 @@ const Scanner = () => {
                             Ready to Analyze Food Products
                           </h3>
                           <p className="text-slate-600 dark:text-slate-300">
-                            Upload a clear image of packaged food items
+                            Upload a clear image of products available on our website
                           </p>
                         </div>
                         
-                        {/* Example Image Section - Lays Masala Chips */}
+                        {/* Example Image Section */}
                         {showExample && (
                           <div className="mt-6 p-4 bg-white/50 dark:bg-slate-800/50 rounded-xl border border-purple-200/30">
                             <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
@@ -310,6 +287,16 @@ const Scanner = () => {
                             </div>
                           </div>
                         )}
+
+                        {/* Available Products Notice */}
+                        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
+                          <p className="text-blue-800 dark:text-blue-200 font-medium mb-1">
+                            📋 Available Products for Analysis:
+                          </p>
+                          <p className="text-blue-600 dark:text-blue-300 text-xs">
+                            Lays, Maggi, Parle-G, Balaji, Haldiram, Britannia, Kurkure, Cadbury, Thums Up, Frooti, Amul, and more!
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -352,8 +339,8 @@ const Scanner = () => {
                       <Zap className="w-8 h-8 text-purple-600" />
                     </div>
                     <div>
-                      <span className="font-bold text-slate-900 dark:text-slate-100 block">AI-Powered</span>
-                      <span className="text-sm text-slate-500">Advanced detection</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">Image Matching</span>
+                      <span className="text-sm text-slate-500">Product comparison</span>
                     </div>
                   </div>
                   <div className="text-center space-y-3">
@@ -362,7 +349,7 @@ const Scanner = () => {
                     </div>
                     <div>
                       <span className="font-bold text-slate-900 dark:text-slate-100 block">Safety Check</span>
-                      <span className="text-sm text-slate-500">Instant analysis</span>
+                      <span className="text-sm text-slate-500">Verified products only</span>
                     </div>
                   </div>
                   <div className="text-center space-y-3">
