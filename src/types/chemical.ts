@@ -1,4 +1,3 @@
-
 export type ChemicalSeverity = "low" | "medium" | "high";
 
 export type RiskEffect = {
@@ -31,9 +30,9 @@ export type ChemicalData = {
   risks: ChemicalRisk[];
 };
 
-export type ProductBrand = "Balaji" | "Lay's" | "Parle" | "Britannia" | "Nestle" | "Haldiram";
+export type ProductBrand = "Balaji" | "Lay's" | "Parle" | "Britannia" | "Nestle" | "Haldiram" | "PepsiCo India" | "Coca-Cola India" | "Parle Agro" | "Capital Foods" | "Amul" | "Mondelēz International";
 
-export type ProductCategory = "Chips" | "Namkeen" | "Snacks" | "Biscuits" | "Breads" | "Ready to Cook/Eat" | "Beverages" | "Dairy" | "Confectionery";
+export type ProductCategory = "Chips" | "Namkeen" | "Snacks" | "Biscuits" | "Breads" | "Ready to Cook/Eat" | "Beverages" | "Dairy" | "Confectionery" | "Noodles" | "Chocolate";
 
 export const chemicalData: ChemicalData[] = [
   {
@@ -335,6 +334,187 @@ export const productDatabase = {
       allergens: ["May contain traces of nuts"],
       shelfLife: "4 months",
       storageInstructions: "Store in an airtight container"
+    }
+  },
+  // Adding all products from ProductGrid to ensure comprehensive coverage
+  "balaji cream onion wafers": {
+    name: "Balaji Cream & Onion Wafers",
+    brand: "Balaji" as ProductBrand,
+    category: "Chips" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?q=80&w=1064&auto=format&fit=crop",
+    riskLevel: "high" as const,
+    chemicals: ["MSG", "TBHQ", "Red 40", "BHA"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 150,
+        protein: 2,
+        carbs: 16,
+        fat: 9,
+        fiber: 1
+      },
+      allergens: ["May contain milk"],
+      shelfLife: "4 months",
+      storageInstructions: "Store in a cool, dry place"
+    }
+  },
+  "thums up": {
+    name: "Thums Up Cola",
+    brand: "Coca-Cola India" as ProductBrand,
+    category: "Beverages" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1629203851122-3726ecdf080e?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "high" as const,
+    chemicals: ["Phosphoric Acid", "Caramel Color", "High Fructose Corn Syrup"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 150,
+        protein: 0,
+        carbs: 39,
+        fat: 0,
+        fiber: 0
+      },
+      allergens: ["None"],
+      shelfLife: "9 months",
+      storageInstructions: "Store in a cool place"
+    }
+  },
+  "mango frooti": {
+    name: "Mango Frooti",
+    brand: "Parle Agro" as ProductBrand,
+    category: "Beverages" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["Yellow 6", "Sodium Benzoate"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 110,
+        protein: 0,
+        carbs: 28,
+        fat: 0,
+        fiber: 0
+      },
+      allergens: ["None"],
+      shelfLife: "12 months",
+      storageInstructions: "Store in a cool place"
+    }
+  },
+  "britannia bourbon": {
+    name: "Britannia Bourbon Biscuits",
+    brand: "Britannia" as ProductBrand,
+    category: "Biscuits" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1587940796248-6bf7c56a5e04?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["TBHQ", "Artificial Flavors"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 140,
+        protein: 2,
+        carbs: 22,
+        fat: 5,
+        fiber: 1
+      },
+      allergens: ["Wheat", "May contain milk"],
+      shelfLife: "6 months",
+      storageInstructions: "Store in an airtight container"
+    }
+  },
+  "kurkure masala munch": {
+    name: "Kurkure Masala Munch",
+    brand: "PepsiCo India" as ProductBrand,
+    category: "Snacks" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1599490659127-9ddf9882f935?q=80&w=1064&auto=format&fit=crop",
+    riskLevel: "high" as const,
+    chemicals: ["MSG", "Acidity Regulators", "Artificial Colors"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 160,
+        protein: 2,
+        carbs: 18,
+        fat: 9,
+        fiber: 1
+      },
+      allergens: ["May contain milk"],
+      shelfLife: "4 months",
+      storageInstructions: "Store in a cool, dry place"
+    }
+  },
+  "britannia marie gold": {
+    name: "Britannia Marie Gold Biscuits",
+    brand: "Britannia" as ProductBrand,
+    category: "Biscuits" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "low" as const,
+    chemicals: ["Emulsifiers"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 120,
+        protein: 2,
+        carbs: 22,
+        fat: 3,
+        fiber: 1
+      },
+      allergens: ["Wheat"],
+      shelfLife: "8 months",
+      storageInstructions: "Store in an airtight container"
+    }
+  },
+  "cadbury dairy milk": {
+    name: "Cadbury Dairy Milk Chocolate",
+    brand: "Mondelēz International" as ProductBrand,
+    category: "Chocolate" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1623341214825-9f4f963727da?q=80&w=1470&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["Emulsifiers", "Artificial Flavors"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 240,
+        protein: 4,
+        carbs: 28,
+        fat: 13,
+        fiber: 2
+      },
+      allergens: ["Milk", "May contain nuts"],
+      shelfLife: "12 months",
+      storageInstructions: "Store in a cool, dry place"
+    }
+  },
+  "chings hakka noodles": {
+    name: "Ching's Hakka Noodles",
+    brand: "Capital Foods" as ProductBrand,
+    category: "Noodles" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1634864572872-ace433219053?q=80&w=1334&auto=format&fit=crop",
+    riskLevel: "medium" as const,
+    chemicals: ["TBHQ", "Sodium Metabisulphite"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 320,
+        protein: 8,
+        carbs: 58,
+        fat: 8,
+        fiber: 2
+      },
+      allergens: ["Wheat"],
+      shelfLife: "8 months",
+      storageInstructions: "Store in a cool, dry place"
+    }
+  },
+  "amul kool milk": {
+    name: "Amul Kool Flavored Milk",
+    brand: "Amul" as ProductBrand,
+    category: "Beverages" as ProductCategory,
+    image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=1287&auto=format&fit=crop",
+    riskLevel: "low" as const,
+    chemicals: ["Stabilizers"],
+    healthInfo: {
+      nutritionalValue: {
+        calories: 120,
+        protein: 6,
+        carbs: 18,
+        fat: 3,
+        fiber: 0
+      },
+      allergens: ["Milk"],
+      shelfLife: "5 days refrigerated",
+      storageInstructions: "Keep refrigerated"
     }
   }
 };

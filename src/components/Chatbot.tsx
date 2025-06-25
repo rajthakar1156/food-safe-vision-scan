@@ -36,17 +36,32 @@ const Chatbot = () => {
   }, [messages]);
 
   const getProductInfo = (productName: string) => {
-    const lowerName = productName.toLowerCase();
-    const matchedProduct = Object.keys(productDatabase).find(key => 
-      key.toLowerCase().includes(lowerName) ||
-      productDatabase[key].name.toLowerCase().includes(lowerName) ||
-      productDatabase[key].brand.toLowerCase().includes(lowerName)
+    const lowerName = productName.toLowerCase().trim();
+    
+    // Direct name matching
+    const directMatch = Object.keys(productDatabase).find(key => 
+      key.toLowerCase() === lowerName ||
+      productDatabase[key].name.toLowerCase() === lowerName
     );
-
-    if (matchedProduct) {
-      return productDatabase[matchedProduct];
-    }
-    return null;
+    
+    if (directMatch) return productDatabase[directMatch];
+    
+    // Partial matching for common product queries
+    const partialMatch = Object.keys(productDatabase).find(key => {
+      const product = productDatabase[key];
+      const keyWords = key.toLowerCase().split(' ');
+      const nameWords = product.name.toLowerCase().split(' ');
+      const brandWords = product.brand.toLowerCase().split(' ');
+      const searchWords = lowerName.split(' ');
+      
+      return searchWords.some(searchWord => 
+        keyWords.some(word => word.includes(searchWord) || searchWord.includes(word)) ||
+        nameWords.some(word => word.includes(searchWord) || searchWord.includes(word)) ||
+        brandWords.some(word => word.includes(searchWord) || searchWord.includes(word))
+      );
+    });
+    
+    return partialMatch ? productDatabase[partialMatch] : null;
   };
 
   const generateSmartResponse = (userQuery: string, productInfo: any) => {
@@ -55,76 +70,145 @@ const Chatbot = () => {
     if (productInfo) {
       let response = `**${productInfo.name}** by ${productInfo.brand}\n\n`;
       
-      // Safety rating analysis
+      // Enhanced safety rating analysis with more detail
       const riskLevel = productInfo.riskLevel;
       if (riskLevel === 'low') {
-        response += `✅ **Safety Rating: LOW RISK**\nThis product is generally safe for consumption with minimal health concerns.\n\n`;
+        response += `✅ **Safety Rating: LOW RISK** ⭐⭐⭐⭐⭐\nThis product is generally safe for consumption with minimal health concerns. Suitable for regular consumption.\n\n`;
       } else if (riskLevel === 'medium') {
-        response += `⚠️ **Safety Rating: MEDIUM RISK**\nConsume in moderation. Some ingredients may cause concerns with regular consumption.\n\n`;
+        response += `⚠️ **Safety Rating: MEDIUM RISK** ⭐⭐⭐\nConsume in moderation. Some ingredients may cause concerns with frequent consumption. Consider limiting intake.\n\n`;
       } else {
-        response += `🚨 **Safety Rating: HIGH RISK**\nConsider avoiding or consuming very rarely due to potentially harmful ingredients.\n\n`;
+        response += `🚨 **Safety Rating: HIGH RISK** ⭐⭐\nConsider avoiding or consuming very rarely due to potentially harmful ingredients. Look for healthier alternatives.\n\n`;
       }
 
-      // Key ingredients
+      // Detailed ingredient analysis
       if (productInfo.chemicals && productInfo.chemicals.length > 0) {
-        response += `**Key Ingredients of Concern:**\n`;
+        response += `**Ingredients of Concern:**\n`;
         productInfo.chemicals.forEach((chemical: string) => {
-          response += `• ${chemical}\n`;
+          let riskEmoji = '⚠️';
+          if (chemical.includes('MSG') || chemical.includes('TBHQ') || chemical.includes('BHA')) {
+            riskEmoji = '🚨';
+          } else if (chemical.includes('Artificial') || chemical.includes('Preservatives')) {
+            riskEmoji = '⚠️';
+          } else {
+            riskEmoji = '🟡';
+          }
+          response += `${riskEmoji} ${chemical}\n`;
         });
         response += '\n';
+      } else {
+        response += `✅ **No Harmful Chemicals Detected**\nThis product appears to be free from major harmful additives.\n\n`;
       }
 
-      // Health information
+      // Enhanced nutritional information
       if (productInfo.healthInfo) {
-        response += `**Nutritional Information (per serving):**\n`;
+        response += `**Nutritional Information (per 100g):**\n`;
         const nutrition = productInfo.healthInfo.nutritionalValue;
-        response += `• Calories: ${nutrition.calories}\n`;
-        response += `• Protein: ${nutrition.protein}g\n`;
-        response += `• Carbs: ${nutrition.carbs}g\n`;
-        response += `• Fat: ${nutrition.fat}g\n\n`;
+        response += `🔥 Calories: ${nutrition.calories} kcal\n`;
+        response += `💪 Protein: ${nutrition.protein}g\n`;
+        response += `🍞 Carbs: ${nutrition.carbs}g\n`;
+        response += `🧈 Fat: ${nutrition.fat}g\n`;
+        if (nutrition.fiber) response += `🌾 Fiber: ${nutrition.fiber}g\n`;
+        response += '\n';
 
+        // Allergen information with better formatting
         if (productInfo.healthInfo.allergens && productInfo.healthInfo.allergens.length > 0) {
-          response += `**Allergen Information:**\n`;
+          response += `**⚠️ Allergen Information:**\n`;
           productInfo.healthInfo.allergens.forEach((allergen: string) => {
-            response += `⚠️ ${allergen}\n`;
+            response += `• ${allergen}\n`;
           });
           response += '\n';
         }
-      }
 
-      // Specific query responses
-      if (query.includes('safe') || query.includes('safety')) {
-        response += `**Safety Assessment:**\nBased on the risk level and ingredients, this product is classified as ${riskLevel} risk. `;
-        if (riskLevel === 'medium' || riskLevel === 'high') {
-          response += `Consider limiting consumption frequency and exploring healthier alternatives.`;
-        } else {
-          response += `It's generally safe for regular consumption.`;
+        // Storage and shelf life info
+        if (productInfo.healthInfo.shelfLife) {
+          response += `**📦 Storage Information:**\n`;
+          response += `• Shelf Life: ${productInfo.healthInfo.shelfLife}\n`;
+          response += `• Storage: ${productInfo.healthInfo.storageInstructions}\n\n`;
         }
       }
 
-      if (query.includes('ingredient') || query.includes('chemical')) {
-        response += `**Ingredient Analysis:**\nThe main ingredients of concern include preservatives and flavor enhancers. Check the full ingredient list on packaging for complete information.`;
+      // Context-aware responses based on user query
+      if (query.includes('safe') || query.includes('safety') || query.includes('risk')) {
+        response += `**Detailed Safety Assessment:**\n`;
+        if (riskLevel === 'high') {
+          response += `This product contains multiple concerning ingredients that may pose health risks with regular consumption. Consider choosing alternatives with fewer artificial additives.`;
+        } else if (riskLevel === 'medium') {
+          response += `This product is relatively safe but contains some ingredients that warrant moderation. It's fine for occasional consumption.`;
+        } else {
+          response += `This product is generally safe for regular consumption with minimal health concerns.`;
+        }
+        response += '\n\n';
       }
 
-      if (query.includes('alternative') || query.includes('substitute')) {
-        response += `**Healthier Alternatives:**\n• Look for organic or natural variants\n• Choose products with fewer preservatives\n• Consider homemade alternatives\n• Check for "no artificial flavors" labels`;
+      if (query.includes('ingredient') || query.includes('chemical') || query.includes('harmful')) {
+        response += `**Ingredient Deep Dive:**\n`;
+        if (productInfo.chemicals.length > 0) {
+          response += `The main concerns are preservatives and artificial additives. `;
+          if (productInfo.chemicals.includes('MSG')) {
+            response += `MSG can cause headaches and sensitivity in some people. `;
+          }
+          if (productInfo.chemicals.includes('TBHQ')) {
+            response += `TBHQ is a synthetic preservative linked to potential health issues. `;
+          }
+          response += `Always check the complete ingredient list on packaging.\n\n`;
+        }
+      }
+
+      if (query.includes('alternative') || query.includes('substitute') || query.includes('healthier')) {
+        response += `**🌱 Healthier Alternatives:**\n`;
+        response += `• Look for organic or natural variants\n`;
+        response += `• Choose products with fewer preservatives\n`;
+        response += `• Consider homemade alternatives\n`;
+        response += `• Check for "no artificial colors/flavors" labels\n`;
+        response += `• Opt for brands with cleaner ingredient lists\n\n`;
+      }
+
+      // Category-specific advice
+      if (productInfo.category === 'Beverages') {
+        response += `**💧 Beverage Safety Tip:** Consider limiting sugary drinks and opt for water, fresh juices, or healthier alternatives.`;
+      } else if (productInfo.category === 'Chips' || productInfo.category === 'Snacks') {
+        response += `**🥔 Snack Safety Tip:** Enjoy in moderation and balance with healthier snacks like nuts, fruits, or homemade options.`;
+      } else if (productInfo.category === 'Biscuits') {
+        response += `**🍪 Biscuit Safety Tip:** Check for trans fats and choose whole grain options when available.`;
       }
 
       return response;
     } else {
-      // General food safety advice when product not found
-      let response = `I couldn't find specific information about "${userQuery}" in my database, but here's some general food safety guidance:\n\n`;
+      // Enhanced general guidance when product not found
+      let response = `I couldn't find "${userQuery}" in our comprehensive database of Indian products, but here's helpful guidance:\n\n`;
       
-      if (query.includes('chip') || query.includes('snack')) {
-        response += `**For Chips/Snacks:**\n• Look for products with minimal ingredients\n• Avoid items with MSG, TBHQ, or artificial colors\n• Check sodium content\n• Consider baked alternatives\n\n`;
+      // Category-specific advice
+      if (query.includes('chip') || query.includes('namkeen') || query.includes('wafer')) {
+        response += `**🥔 For Chips/Namkeen:**\n• Avoid MSG, TBHQ, artificial colors\n• Check sodium content\n• Look for baked alternatives\n• Choose brands with natural ingredients\n\n`;
       }
       
       if (query.includes('biscuit') || query.includes('cookie')) {
-        response += `**For Biscuits/Cookies:**\n• Check for trans fats (partially hydrogenated oils)\n• Look for whole grain options\n• Limit products with high sugar content\n• Choose items with natural ingredients\n\n`;
+        response += `**🍪 For Biscuits/Cookies:**\n• Avoid trans fats (partially hydrogenated oils)\n• Choose whole grain options\n• Limit high sugar content\n• Look for natural ingredients\n\n`;
       }
 
-      response += `**General Tips:**\n• Always read ingredient labels\n• Choose products with fewer, recognizable ingredients\n• Limit processed foods in your diet\n• When in doubt, opt for fresh, whole foods\n\n`;
-      response += `Could you provide the exact product name or brand? I can give you more specific information!`;
+      if (query.includes('noodles') || query.includes('pasta')) {
+        response += `**🍜 For Noodles:**\n• Check for TBHQ and MSG\n• Look for whole grain options\n• Limit sodium content\n• Choose brands with fewer preservatives\n\n`;
+      }
+
+      if (query.includes('drink') || query.includes('beverage') || query.includes('juice')) {
+        response += `**🥤 For Beverages:**\n• Avoid high fructose corn syrup\n• Check artificial colors and flavors\n• Limit phosphoric acid content\n• Choose natural fruit juices\n\n`;
+      }
+
+      response += `**🔍 General Food Safety Tips:**\n`;
+      response += `• Always read ingredient labels carefully\n`;
+      response += `• Choose products with fewer, recognizable ingredients\n`;
+      response += `• Limit processed foods in your diet\n`;
+      response += `• When in doubt, opt for fresh, whole foods\n`;
+      response += `• Look for certifications like organic or natural\n\n`;
+      
+      response += `**📋 Available Products in Our Database:**\n`;
+      response += `I have detailed information about ${Object.keys(productDatabase).length} popular Indian products including:\n`;
+      response += `• Lay's Magic Masala, Balaji Wafers\n`;
+      response += `• Parle-G, Monaco, Britannia products\n`;
+      response += `• Maggi Noodles, Kurkure, Haldiram's snacks\n`;
+      response += `• Thums Up, Frooti, Amul products\n`;
+      response += `• Cadbury chocolates and more!\n\n`;
+      response += `Could you provide the exact product name or brand? I can give you detailed safety analysis!`;
       
       return response;
     }
