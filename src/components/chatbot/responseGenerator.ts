@@ -27,38 +27,54 @@ export const generateSmartResponse = (userQuery: string, productInfo: any) => {
     
     response += `${safetyIcon} **Safety Rating:** ${safetyText} (${riskScore})\n\n`;
 
-    // Key ingredients of concern
+    // Key ingredients of concern (limit to 2 for brevity)
     if (productInfo.chemicals && productInfo.chemicals.length > 0) {
-      response += `**Key Ingredients:**\n`;
-      productInfo.chemicals.slice(0, 3).forEach((chemical: string) => {
-        response += `• ${chemical}\n`;
-      });
-      if (productInfo.chemicals.length > 3) {
-        response += `• +${productInfo.chemicals.length - 3} more additives\n`;
-      }
-      response += `\n`;
-    }
-
-    // Nutritional summary
-    if (productInfo.healthInfo) {
-      const nutrition = productInfo.healthInfo.nutritionalValue;
-      response += `**Nutrition (per 100g):**\n`;
-      response += `Calories: ${nutrition.calories} | Protein: ${nutrition.protein}g | Fat: ${nutrition.fat}g\n\n`;
+      response += `**Key Ingredients:** ${productInfo.chemicals.slice(0, 2).join(', ')}\n\n`;
     }
 
     // Health recommendation
     response += `**Recommendation:** `;
     if (riskLevel === 'low') {
-      response += `Suitable for regular consumption as part of balanced diet.`;
+      response += `Suitable for regular consumption.\n\n`;
     } else if (riskLevel === 'medium') {
-      response += `Consume occasionally. Balance with fresh foods.`;
+      response += `Consume occasionally. Balance with fresh foods.\n\n`;
     } else {
-      response += `Limit consumption. Consider healthier alternatives.`;
+      response += `Limit consumption. Consider healthier alternatives.\n\n`;
+    }
+
+    // Add healthy alternatives based on product category
+    response += `**🌟 Healthier Alternatives:**\n`;
+    
+    const category = productInfo.category.toLowerCase();
+    if (category.includes('chips') || category.includes('snacks')) {
+      response += `• Roasted chickpeas or nuts\n`;
+      response += `• Baked sweet potato chips\n`;
+      response += `• Air-popped popcorn\n`;
+    } else if (category.includes('biscuits')) {
+      response += `• Oats biscuits (sugar-free)\n`;
+      response += `• Multigrain crackers\n`;
+      response += `• Homemade whole wheat cookies\n`;
+    } else if (category.includes('noodles') || category.includes('ready to cook')) {
+      response += `• Whole grain pasta\n`;
+      response += `• Quinoa noodles\n`;
+      response += `• Fresh vegetable soup\n`;
+    } else if (category.includes('beverages')) {
+      response += `• Fresh fruit juices (no added sugar)\n`;
+      response += `• Coconut water\n`;
+      response += `• Herbal teas\n`;
+    } else if (category.includes('chocolate')) {
+      response += `• Dark chocolate (70%+ cocoa)\n`;
+      response += `• Dates with nuts\n`;
+      response += `• Homemade energy balls\n`;
+    } else {
+      response += `• Fresh fruits and vegetables\n`;
+      response += `• Nuts and seeds\n`;
+      response += `• Homemade alternatives\n`;
     }
 
     // Allergen warning if present
     if (productInfo.healthInfo?.allergens && productInfo.healthInfo.allergens.length > 0) {
-      response += `\n\n⚠️ **Contains:** ${productInfo.healthInfo.allergens.join(', ')}`;
+      response += `\n⚠️ **Contains:** ${productInfo.healthInfo.allergens.join(', ')}`;
     }
 
     return response;
@@ -70,8 +86,7 @@ export const generateSmartResponse = (userQuery: string, productInfo: any) => {
     response += `🥔 Chips: Lays, Kurkure, Balaji\n`;
     response += `🍪 Biscuits: Parle-G, Bourbon, Monaco\n`;
     response += `🍜 Noodles: Maggi, Ching's\n`;
-    response += `🥤 Beverages: Thums Up, Frooti\n`;
-    response += `🍫 Chocolate: Dairy Milk\n\n`;
+    response += `🥤 Beverages: Thums Up, Frooti\n\n`;
     
     response += `Please specify a product name for detailed analysis.`;
     
