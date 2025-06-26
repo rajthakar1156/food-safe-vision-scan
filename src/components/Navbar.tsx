@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings, History, Clock, Calendar } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, User, Mail, LogOut, Settings, History, Clock, Calendar, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
@@ -156,6 +167,17 @@ const Navbar = () => {
     });
   };
 
+  const handleDeleteAllHistory = () => {
+    setScanHistory([]);
+    setScannedCount(0);
+    
+    toast({
+      title: "History Cleared",
+      description: "All scan history has been deleted successfully.",
+      variant: "default",
+    });
+  };
+
   const getRiskColor = (riskLevel: string) => {
     switch (riskLevel) {
       case "high": return "bg-red-100 text-red-700 border-red-200";
@@ -185,96 +207,137 @@ const Navbar = () => {
                 </p>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              onClick={() => setShowScanHistory(false)}
-              className="p-2"
-            >
-              <X className="w-5 h-5" />
-            </Button>
+            <div className="flex items-center gap-2">
+              {scanHistory.length > 0 && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 border-red-300 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete All
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete All Scan History?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete all your scan history and reset your scan count.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction 
+                        onClick={handleDeleteAllHistory}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        Delete All
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+              <Button
+                variant="ghost"
+                onClick={() => setShowScanHistory(false)}
+                className="p-2"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
           
           <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-            <div className="grid gap-4 sm:gap-6">
-              {scanHistory.map((scan) => (
-                <div key={scan.id} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    {/* Product Image */}
-                    <div className="flex-shrink-0">
-                      <img 
-                        src={scan.image} 
-                        alt={scan.productName}
-                        className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg"
-                      />
-                    </div>
-                    
-                    {/* Product Details */}
-                    <div className="flex-1 space-y-3">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                        <div>
-                          <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">
-                            {scan.productName}
-                          </h3>
-                          <p className="text-slate-600 dark:text-slate-300 font-medium">
-                            {scan.brand}
-                          </p>
+            {scanHistory.length === 0 ? (
+              <div className="text-center py-12">
+                <History className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-500 mb-2">No Scan History</h3>
+                <p className="text-slate-400">Start scanning products to see your history here.</p>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:gap-6">
+                {scanHistory.map((scan) => (
+                  <div key={scan.id} className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      {/* Product Image */}
+                      <div className="flex-shrink-0">
+                        <img 
+                          src={scan.image} 
+                          alt={scan.productName}
+                          className="w-full sm:w-20 h-32 sm:h-20 object-cover rounded-lg"
+                        />
+                      </div>
+                      
+                      {/* Product Details */}
+                      <div className="flex-1 space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                          <div>
+                            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">
+                              {scan.productName}
+                            </h3>
+                            <p className="text-slate-600 dark:text-slate-300 font-medium">
+                              {scan.brand}
+                            </p>
+                          </div>
+                          
+                          <div className="flex flex-col sm:items-end gap-2">
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(scan.riskLevel)}`}>
+                              {scan.riskLevel.charAt(0).toUpperCase() + scan.riskLevel.slice(1)} Risk
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                              <Calendar className="w-4 h-4" />
+                              <span>{scan.scanDate}</span>
+                              <Clock className="w-4 h-4" />
+                              <span>{scan.scanTime}</span>
+                            </div>
+                          </div>
                         </div>
                         
-                        <div className="flex flex-col sm:items-end gap-2">
-                          <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(scan.riskLevel)}`}>
-                            {scan.riskLevel.charAt(0).toUpperCase() + scan.riskLevel.slice(1)} Risk
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                            <Calendar className="w-4 h-4" />
-                            <span>{scan.scanDate}</span>
-                            <Clock className="w-4 h-4" />
-                            <span>{scan.scanTime}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Nutritional Score */}
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                          Health Score:
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full transition-all duration-500 ${
-                                scan.nutritionalScore >= 80 ? "bg-green-500" :
-                                scan.nutritionalScore >= 60 ? "bg-yellow-500" : "bg-red-500"
-                              }`}
-                              style={{ width: `${scan.nutritionalScore}%` }}
-                            />
-                          </div>
-                          <span className={`text-sm font-bold ${getScoreColor(scan.nutritionalScore)}`}>
-                            {scan.nutritionalScore}/100
+                        {/* Nutritional Score */}
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                            Health Score:
                           </span>
-                        </div>
-                      </div>
-                      
-                      {/* Chemicals Found */}
-                      <div>
-                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400 block mb-2">
-                          Chemicals Found:
-                        </span>
-                        <div className="flex flex-wrap gap-2">
-                          {scan.chemicals.map((chemical, index) => (
-                            <span 
-                              key={index}
-                              className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs rounded-md text-slate-700 dark:text-slate-300"
-                            >
-                              {chemical}
+                          <div className="flex items-center gap-2">
+                            <div className="w-16 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full transition-all duration-500 ${
+                                  scan.nutritionalScore >= 80 ? "bg-green-500" :
+                                  scan.nutritionalScore >= 60 ? "bg-yellow-500" : "bg-red-500"
+                                }`}
+                                style={{ width: `${scan.nutritionalScore}%` }}
+                              />
+                            </div>
+                            <span className={`text-sm font-bold ${getScoreColor(scan.nutritionalScore)}`}>
+                              {scan.nutritionalScore}/100
                             </span>
-                          ))}
+                          </div>
+                        </div>
+                        
+                        {/* Chemicals Found */}
+                        <div>
+                          <span className="text-sm font-medium text-slate-600 dark:text-slate-400 block mb-2">
+                            Chemicals Found:
+                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            {scan.chemicals.map((chemical, index) => (
+                              <span 
+                                key={index}
+                                className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs rounded-md text-slate-700 dark:text-slate-300"
+                              >
+                                {chemical}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
