@@ -38,14 +38,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <Send className="w-4 h-4" />
         </Button>
       </div>
-      <div className="flex items-center justify-between text-xs">
-        <p className="text-green-600 flex items-center gap-1">
-          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-          Free AI - No registration needed
-        </p>
-        <p className="text-purple-600 flex items-center gap-1">
+      <div className="flex items-center justify-center">
+        <p className="text-purple-600 flex items-center gap-1 text-xs">
           <Award className="w-3 h-3" />
-          Instant Analysis
+          Instant Product Analysis
         </p>
       </div>
     </div>
