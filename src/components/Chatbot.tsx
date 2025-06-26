@@ -15,7 +15,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "🌟 Hello! I'm your **Smart Food Safety AI Assistant**! 🍽️\n\nI have detailed information about **16+ popular Indian food products** including ingredients, safety ratings, nutritional facts, and health recommendations.\n\n✨ **What I can help with:**\n• Complete product analysis\n• Safety ratings & risk assessment\n• Ingredient breakdown\n• Nutritional information\n• Health recommendations\n• Alternative suggestions\n\n💬 Just mention any product name like *Maggi*, *Lays*, *Parle-G*, etc!",
+      text: "Good day! I am your dedicated Food Safety AI Assistant, equipped with comprehensive data on 16+ popular Indian food products.\n\nI provide detailed analysis including:\n• Complete ingredient profiles and safety assessments\n• Nutritional information and health recommendations\n• Risk evaluations and alternative product suggestions\n• Storage guidelines and consumption advice\n\nPlease feel free to inquire about any specific product such as Maggi, Lays, Parle-G, or similar items for a thorough analysis.",
       isUser: false,
       timestamp: new Date()
     }
@@ -69,7 +69,7 @@ const Chatbot = () => {
       console.error('Error generating response:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "🚨 I'm having trouble processing your request right now. Please try asking about a specific product name or ingredient! 🔄",
+        text: "I apologize for the technical difficulty. Please try rephrasing your query or specify a particular product name for analysis.",
         isUser: false,
         timestamp: new Date()
       };
@@ -93,7 +93,7 @@ const Chatbot = () => {
         {!isOpen && (
           <Button
             onClick={() => setIsOpen(true)}
-            className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-pulse"
+            className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110"
           >
             <MessageCircle className="w-7 h-7" />
             <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-yellow-300" />

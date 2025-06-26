@@ -13,7 +13,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose }) => {
       <div className="flex items-center gap-3">
         <div className="relative">
           <Bot className="w-6 h-6" />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
         </div>
         <div>
           <span className="font-bold text-lg">Food Safety AI</span>
