@@ -53,7 +53,6 @@ const Navbar = () => {
       setUserProfile(mockProfile);
       setScannedCount(24);
       
-      // Enhanced mock scan history with proper timestamps
       const mockHistory: ScanHistory[] = [
         {
           id: "1",
@@ -65,7 +64,7 @@ const Navbar = () => {
           image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=400&q=80",
           chemicals: ["MSG", "TBHQ", "Artificial Colors"],
           nutritionalScore: 65,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000)
         },
         {
           id: "2",
@@ -77,7 +76,7 @@ const Navbar = () => {
           image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
           chemicals: ["Emulsifiers", "Raising Agents"],
           nutritionalScore: 78,
-          timestamp: new Date(Date.now() - 25 * 60 * 60 * 1000) // Yesterday
+          timestamp: new Date(Date.now() - 25 * 60 * 60 * 1000)
         },
         {
           id: "3",
@@ -89,7 +88,7 @@ const Navbar = () => {
           image: "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=400&q=80",
           chemicals: ["MSG", "TBHQ", "Sodium Nitrite", "Artificial Flavors"],
           nutritionalScore: 45,
-          timestamp: new Date(Date.now() - 50 * 60 * 60 * 1000) // 2 days ago
+          timestamp: new Date(Date.now() - 50 * 60 * 60 * 1000)
         },
         {
           id: "4",
@@ -101,7 +100,7 @@ const Navbar = () => {
           image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&q=80",
           chemicals: ["Artificial Colors", "Preservatives"],
           nutritionalScore: 58,
-          timestamp: new Date(Date.now() - 75 * 60 * 60 * 1000) // 3 days ago
+          timestamp: new Date(Date.now() - 75 * 60 * 60 * 1000)
         },
         {
           id: "5",
@@ -113,7 +112,7 @@ const Navbar = () => {
           image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80",
           chemicals: ["Modified Starch", "Preservatives"],
           nutritionalScore: 82,
-          timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 1 week ago
+          timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         }
       ];
       
@@ -558,7 +557,7 @@ const Navbar = () => {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    <span className="font-medium">Continue with Google</span>
+                    <span className="text-gray-700 font-medium">Continue with Google</span>
                   </div>
                 </Button>
               )}
